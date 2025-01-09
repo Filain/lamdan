@@ -1,14 +1,15 @@
-import express, { Application, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import 'dotenv/config';
 import * as mongoose from 'mongoose';
 
 import { config } from './config/config';
-import {ErrorHandler} from "./errors/handler.error";
-import Logger from "./libs/winston/logger";
-import {BaseError} from "./errors/base.error";
-
+import { ErrorHandler } from './errors/handler.error';
+import Logger from './libs/winston/logger';
+import { authRouter } from './routes/auth.routes';
+import { BaseError } from './errors/base.error';
 
 const app: Application = express();
+
 const errorHandler = new ErrorHandler(Logger());
 
 const { port, dbUser, dbPassword, dbName } = config;
@@ -16,27 +17,22 @@ const { port, dbUser, dbPassword, dbName } = config;
 // Middleware для роботи з JSON
 app.use(express.json());
 
-console.log('Hello, TypeScript with Express!');
-
 // Маршрут для перевірки сервера
-app.get('/', (_, res: Response) => {
-    res.send('Hello, TypeScript with Expres!');
-
-});
-Logger().info('Інформація про запуск сервера');
+app.use('/auth', authRouter);
+app.use(errorMiddleware);
 
 mongoose
     .connect(
         `mongodb+srv://${dbUser}:${dbPassword}@mycluster.kb2zz.mongodb.net/${dbName}?retryWrites=true&w=majority`,
     )
     .then(() => {
-        console.log('✅ MongoDB connected successfully');
+        Logger().info('✅ MongoDB connected successfully');
         app.listen(port, () => {
             console.log(`Server is running at http://localhost:${port} 🚜🚜🚜`);
         });
     })
     .catch(error => {
-        console.error('❌ MongoDB connection error:', error);
+        Logger().error('❌ MongoDB connection error:', error);
         process.exit(1);
     });
 
@@ -49,7 +45,21 @@ process.on('unhandledRejection', (reason: Error) => {
     throw reason;
 });
 
-throw new BaseError ('Та', 'тут', "метот", 400, true);
+async function errorMiddleware(
+    err: BaseError,
+    _: Request,
+    _res: Response,
+    next: NextFunction,
+) {
+    if (!errorHandler.isTrustedError(err)) {
+        next(err);
+        return;
+    }
+    await errorHandler.handleError(err);
+    // під питанням в оригіналі того не було
+    // res.status(err.httpCode || 500).json({
+    //     message: err.message || 'Internal Server Error',
+    // });
+}
 
-
-
+throw new BaseError('1', '2', '3', 500, true);
