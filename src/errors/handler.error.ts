@@ -17,6 +17,6 @@ export class ErrorHandler {
 
     public isTrustedError(error: Error) {
         return error instanceof BaseError && error.isOperational;
-        // перевіряє чи ця помилка операційна
+        // перевіряє чи ця помилка операційна - тобто яку ми передбачаємо
     }
 }

@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express';
 import { ICreateUserRequestBody } from '../interfases/user.interfaces';
 import SuccessHandler from '../handlers/success.handler';
 import { authService, AuthService } from '../services/auth.service';
-import { BaseError } from '../errors/base.error';
 
 class AuthController {
     constructor(private authService: AuthService) {}
@@ -28,7 +27,6 @@ class AuthController {
 
             SuccessHandler.ok(res, 'test');
         } catch (err) {
-            res.status((<BaseError>err)?.httpCode || 500).send('sdffghjk');
             next(err);
         }
     };

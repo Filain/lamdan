@@ -1,40 +1,37 @@
 import winston from 'winston';
 
-const { format, createLogger, transports } = winston;
-const { timestamp, combine, printf, errors } = format;
+const logFormat = winston.format.printf(
+    ({
+        level,
+        message,
+        timestamp,
+        stack,
+        methodName,
+        log,
+        httpCode,
+        isOperational,
+    }) => {
+        return (
+            `${level}` +
+            (httpCode ? `  HttpCode:${httpCode},` : '') +
+            (methodName ? `  Method:${methodName},` : '') +
+            (log ? `  LOG:${log},` : '') +
+            `  Message:${message},` +
+            (isOperational ? `  isOperational:${isOperational},` : '') +
+            ` ${timestamp}` +
+            (stack ? `\n${stack}` : '')
+        );
+    },
+);
 
-function Logger() {
-    const logFormat = printf(
-        ({
-            level,
-            message,
-            timestamp,
-            stack,
-            methodName,
-            log,
-            httpCode,
-            isOperational,
-        }) => {
-            return (
-                `${level} ${timestamp} Message:${message}` +
-                (methodName ? `, Method:${methodName}` : '') +
-                (log ? `, Log:${log}` : '') +
-                (httpCode ? `, HttpCode:${httpCode}` : '') +
-                (isOperational ? `, IsOperational:${isOperational}` : '') +
-                (stack ? `,\n${stack}` : '')
-            );
-        },
-    );
-
-    return createLogger({
-        format: combine(
-            format.colorize(),
-            timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            errors({ stack: true }),
-            logFormat,
-        ),
-        transports: [new transports.Console()],
-    });
-}
+const Logger = winston.createLogger({
+    format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.errors({ stack: true }),
+        logFormat,
+    ),
+    transports: [new winston.transports.Console()],
+});
 
 export default Logger;

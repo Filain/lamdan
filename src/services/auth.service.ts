@@ -12,15 +12,21 @@ export class AuthService {
             throw new BaseError(
                 'Could not save in DB, already exists',
                 'registerUser',
-                'registerUser',
                 400,
+                'User already exists',
             );
         }
 
         return await this.authRepository.registerUser(userData);
     }
     test(): void {
-        throw new BaseError('test', 'test2', 'test', 500, false);
+        throw new BaseError(
+            'This is a test',
+            'test method',
+            403,
+            'Forbidden',
+            true,
+        );
     }
 }
 

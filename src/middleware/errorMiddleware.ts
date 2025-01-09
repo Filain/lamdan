@@ -4,12 +4,12 @@ import Logger from '../libs/winston/logger';
 import { ErrorHandler } from '../errors/handler.error';
 import { BaseError } from '../errors/base.error';
 
-const errorHandler = new ErrorHandler(Logger());
+const errorHandler = new ErrorHandler(Logger);
 
 export async function errorMiddleware(
     err: BaseError,
     _: Request,
-    _res: Response,
+    res: Response,
     next: NextFunction,
 ) {
     if (!errorHandler.isTrustedError(err)) {
@@ -17,8 +17,8 @@ export async function errorMiddleware(
         return;
     }
     await errorHandler.handleError(err);
-    // під питанням в оригіналі того не було
-    // res.status(err.httpCode || 500).json({
-    //     message: err.message || 'Internal Server Error',
-    // });
+    // Відпраляє статус, код помилки та повідомлення помилки на клієнт
+    res.status(err.httpCode || 500).json({
+        message: err.message || 'Internal Server Error',
+    });
 }
