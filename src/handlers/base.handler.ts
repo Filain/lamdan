@@ -4,9 +4,9 @@ class BaseHandler {
     static responseConstructor(
         response: Response,
         statusCode: number,
-        data: unknown,
+        data?: unknown,
     ): Response {
-        return response.status(statusCode).json(data);
+        return response.status(statusCode)?.json(data);
     }
 }
 

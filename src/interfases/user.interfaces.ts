@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { JwtPayload } from 'jsonwebtoken';
 
 export interface IUser {
     _id: mongoose.Types.ObjectId;
@@ -14,7 +15,22 @@ export interface IUser {
 }
 
 export interface ICreateUserRequestBody {
-    username: string;
+    username?: string;
     email: string;
     password: string;
 }
+export interface ILoginUserRequestBody {
+    email: string;
+    password: string;
+}
+
+export interface IUserResponse {
+    data: IUser;
+}
+
+export interface TokenPayload extends JwtPayload {
+    uid: string;
+    role: string;
+}
+
+export type AuthTokens = { accessToken: string; refreshToken: string };
