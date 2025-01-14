@@ -1,12 +1,27 @@
 import express from 'express';
 
 import { authController } from '../controllers/auth.controller';
+import { commonMiddleware } from '../middleware/common.middleware';
+import { UserValidator } from '../validators/user.validator';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+router.post(
+    '/register',
+    commonMiddleware.isBodyValid(UserValidator.create),
+    authController.register,
+);
+router.post(
+    '/login',
+    commonMiddleware.isBodyValid(UserValidator.signIn),
+    authController.login,
+);
 router.post('/logout', authController.logout);
-router.post('/refresh', authController.refresh);
+router.post(
+    '/refresh',
+    authMiddleware.checkRefreshToken,
+    authController.refresh,
+);
 
 export const authRouter = router;

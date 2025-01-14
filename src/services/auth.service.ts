@@ -79,7 +79,7 @@ export class AuthService {
         response.clearCookie('refreshToken');
     }
 
-    refresh = async (response: Response, refresh: string) => {
+    async refresh(response: Response, refresh: string) {
         if (!refresh) {
             throw new BaseError(
                 'User Refresh failed',
@@ -109,7 +109,7 @@ export class AuthService {
 
         const tokens = this.createTokens({ uid, role });
         this.setupCookies(response, tokens);
-    };
+    }
 
     private setupCookies(
         response: Response,

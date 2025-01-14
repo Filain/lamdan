@@ -27,7 +27,7 @@ class AuthController {
     };
 
     login = async (
-        req: Request<ILoginUserRequestBody>,
+        req: Request<object, object, ILoginUserRequestBody>,
         res: Response<IUserResponse>,
         next: NextFunction,
     ): Promise<void> => {
