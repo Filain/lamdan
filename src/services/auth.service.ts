@@ -128,18 +128,18 @@ export class AuthService {
         const cookieAccessExpires = Date.now() + cookie_access_expires;
         const cookieRefreshExpires = Date.now() + cookie_refresh_expires;
 
-        response.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            sameSite: this.parseSameSite(cookie_sameSite),
-            secure: cookie_secure,
-            expires: new Date(cookieRefreshExpires),
-        });
-
         response.cookie('accessToken', accessToken, {
             httpOnly: true,
             sameSite: this.parseSameSite(cookie_sameSite),
             secure: cookie_secure,
             expires: new Date(cookieAccessExpires),
+        });
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            sameSite: this.parseSameSite(cookie_sameSite),
+            secure: cookie_secure,
+            expires: new Date(cookieRefreshExpires),
         });
     }
 

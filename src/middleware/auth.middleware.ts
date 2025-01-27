@@ -10,6 +10,16 @@ interface CustomRequest extends Request {
     user: { userId: string; userRole: string };
 }
 
+function isTokenPayload(decoded: string | JwtPayload): decoded is TokenPayload {
+    return (
+        typeof decoded !== 'string' &&
+        'uid' in decoded &&
+        'role' in decoded &&
+        typeof decoded.uid === 'string' &&
+        typeof decoded.role === 'string'
+    );
+}
+
 class AuthMiddleware {
     public async checkAccessToken(
         req: CustomRequest,
@@ -27,7 +37,7 @@ class AuthMiddleware {
             }
             const JWTdecoded = jwt.verify(accessToken, config.jwt_secret);
 
-            if (!this.isTokenPayload(JWTdecoded)) {
+            if (!isTokenPayload(JWTdecoded)) {
                 throw new BaseError(
                     'Access token not found',
                     'AuthMiddleware.checkAccessToken',
@@ -46,6 +56,7 @@ class AuthMiddleware {
 
             req.user.userId = uid;
             req.user.userRole = role;
+            next();
         } catch (e) {
             next(e);
         }
@@ -58,6 +69,7 @@ class AuthMiddleware {
     ) {
         try {
             const { refreshToken } = req.cookies;
+
             if (!refreshToken) {
                 throw new BaseError(
                     'Refresh token not found',
@@ -66,29 +78,36 @@ class AuthMiddleware {
                 );
             }
             const JWTdecoded = jwt.verify(refreshToken, config.jwt_secret);
+            console.log(JWTdecoded);
 
-            if (!this.isTokenPayload(JWTdecoded)) {
+            if (!isTokenPayload(JWTdecoded)) {
                 throw new BaseError(
                     'Refresh token not found',
                     'AuthMiddleware.checkRefreshToken',
                     status.UNAUTHORIZED,
                 );
             }
+            const currentTime = Math.floor(Date.now() / 1000);
+            if (!JWTdecoded.exp) {
+                throw new BaseError(
+                    'Refresh token does not contain expiration time',
+                    'AuthMiddleware.checkRefreshToken',
+                    status.UNAUTHORIZED,
+                );
+            }
+
+            if (JWTdecoded.exp < currentTime) {
+                throw new BaseError(
+                    'Refresh token expired',
+                    'AuthMiddleware.checkRefreshToken',
+                    status.UNAUTHORIZED,
+                );
+            }
+
+            next();
         } catch (e) {
             next(e);
         }
-    }
-
-    private isTokenPayload(
-        decoded: string | JwtPayload,
-    ): decoded is TokenPayload {
-        return (
-            typeof decoded !== 'string' &&
-            'uid' in decoded &&
-            'role' in decoded &&
-            typeof decoded.uid === 'string' &&
-            typeof decoded.role === 'string'
-        );
     }
 }
 
