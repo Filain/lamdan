@@ -17,7 +17,7 @@ router.post(
     commonMiddleware.isBodyValid(UserValidator.signIn),
     authController.login,
 );
-router.post('/logout', authController.logout);
+router.post('/logout', authMiddleware.checkAccessToken, authController.logout);
 router.post(
     '/refresh',
     authMiddleware.checkRefreshToken,

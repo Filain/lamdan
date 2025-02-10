@@ -7,7 +7,7 @@ import { config } from '../config/config';
 import { TokenPayload } from '../interfases/user.interfaces';
 
 interface CustomRequest extends Request {
-    user: { userId: string; userRole: string };
+    user?: { userId: string; userRole: string };
 }
 
 function isTokenPayload(decoded: string | JwtPayload): decoded is TokenPayload {
@@ -78,8 +78,6 @@ class AuthMiddleware {
                 );
             }
             const JWTdecoded = jwt.verify(refreshToken, config.jwt_secret);
-            console.log(JWTdecoded);
-
             if (!isTokenPayload(JWTdecoded)) {
                 throw new BaseError(
                     'Refresh token not found',
