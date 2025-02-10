@@ -1,44 +1,59 @@
-import express, { Application, Response } from 'express';
+import express, { Application } from 'express';
 import 'dotenv/config';
 import * as mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import bcrypt from 'bcrypt';
 
 import { config } from './config/config';
-import {ErrorHandler} from "./errors/handler.error";
-import Logger from "./libs/winston/logger";
-import {BaseError} from "./errors/base.error";
-
+import { ErrorHandler } from './errors/handler.error';
+import Logger from './libs/winston/logger';
+import { authRouter } from './routes/auth.routes';
+import { errorMiddleware } from './middleware/errorMiddleware';
+import userModel from './models/user.model';
 
 const app: Application = express();
-const errorHandler = new ErrorHandler(Logger());
+
+const errorHandler = new ErrorHandler(Logger);
 
 const { port, dbUser, dbPassword, dbName } = config;
 
-// Middleware для роботи з JSON
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-console.log('Hello, TypeScript with Express!');
-
 // Маршрут для перевірки сервера
-app.get('/', (_, res: Response) => {
-    res.send('Hello, TypeScript with Expres!');
+app.use('/auth', authRouter);
 
-});
-Logger().info('Інформація про запуск сервера');
+async function createDefaultAdmin() {
+    const existingAdmin = await userModel.findOne({ email: 'admin@gmail.com' });
+    if (!existingAdmin) {
+        const hashedPassword = await bcrypt.hash('admin', 10);
+        await userModel.create({
+            email: 'admin@gmail.com',
+            password: hashedPassword,
+            role: 'admin',
+        });
+        Logger.info('👨 Default admin user created');
+    }
+}
 
 mongoose
     .connect(
         `mongodb+srv://${dbUser}:${dbPassword}@mycluster.kb2zz.mongodb.net/${dbName}?retryWrites=true&w=majority`,
     )
     .then(() => {
-        console.log('✅ MongoDB connected successfully');
+        Logger.info('✅ MongoDB connected successfully');
         app.listen(port, () => {
             console.log(`Server is running at http://localhost:${port} 🚜🚜🚜`);
         });
     })
+    .then(() => createDefaultAdmin())
     .catch(error => {
-        console.error('❌ MongoDB connection error:', error);
+        Logger.error('❌ MongoDB connection error:', error);
         process.exit(1);
     });
+
+app.use(errorMiddleware);
 
 process.on('uncaughtException', async (error: Error) => {
     await errorHandler.handleError(error);
@@ -48,8 +63,3 @@ process.on('uncaughtException', async (error: Error) => {
 process.on('unhandledRejection', (reason: Error) => {
     throw reason;
 });
-
-throw new BaseError ('Та', 'тут', "метот", 400, true);
-
-
-
