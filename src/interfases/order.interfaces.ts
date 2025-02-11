@@ -1,3 +1,8 @@
+export interface IOrderList {
+    data: IOrder[];
+    total: number;
+}
+
 export interface IOrder {
     name: string;
     surname: string;
@@ -14,3 +19,8 @@ export interface IOrder {
     msg: string;
     status: string;
 }
+
+export type GetAllOrdersQuery = {
+    page?: string;
+    limit?: string;
+};
