@@ -7,6 +7,7 @@ import {
 } from '../interfases/user.interfaces';
 import SuccessHandler from '../handlers/success.handler';
 import { authService, AuthService } from '../services/auth.service';
+import { LoginRequestBody } from '../interfases/req.interfaces';
 
 class AuthController {
     constructor(private authService: AuthService) {}
@@ -27,7 +28,7 @@ class AuthController {
     };
 
     login = async (
-        req: Request<object, object, ILoginUserRequestBody>,
+        req: LoginRequestBody<ILoginUserRequestBody>,
         res: Response<IUserResponse>,
         next: NextFunction,
     ): Promise<void> => {
