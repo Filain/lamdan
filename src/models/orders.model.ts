@@ -16,8 +16,23 @@ const ordersSchema = new mongoose.Schema(
         utm: { type: String, default: '' },
         msg: { type: String, default: null },
         status: { type: String, default: null },
+        manager: {
+            type: String,
+            default: null,
+        },
+        group: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Group',
+            default: null,
+        },
+        comment: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment',
+            },
+        ],
     },
-    { timestamps: true },
+    { timestamps: false, versionKey: false },
 );
 
 const ordersModel = mongoose.model('Orders', ordersSchema);

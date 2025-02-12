@@ -27,18 +27,15 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
         },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-        orders: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Orders',
-            },
-        ],
+
+        // orders: [
+        //     {
+        //         type: mongoose.Schema.Types.ObjectId,
+        //         ref: 'Orders',
+        //     },
+        // ],
     },
-    { timestamps: true },
+    { timestamps: true, versionKey: false },
 );
 
 const userModel = mongoose.model('User', userSchema);

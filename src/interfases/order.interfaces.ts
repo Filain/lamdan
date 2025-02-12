@@ -1,4 +1,12 @@
+import mongoose from 'mongoose';
+
+export interface IOrderList {
+    data: IOrder[];
+    total: number;
+}
+
 export interface IOrder {
+    _id?: mongoose.Types.ObjectId;
     name: string;
     surname: string;
     email: string;
@@ -13,4 +21,12 @@ export interface IOrder {
     utm: string;
     msg: string;
     status: string;
+    manager?: string;
+    group?: mongoose.Types.ObjectId;
+    comment?: mongoose.Types.ObjectId[];
 }
+
+export type GetAllOrdersQuery = {
+    page?: string;
+    limit?: string;
+};
