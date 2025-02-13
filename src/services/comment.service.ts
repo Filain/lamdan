@@ -1,93 +1,89 @@
 import status from 'http-status';
 
 import { BaseError } from '../errors/base.error';
-import { IOrder, IOrderList } from '../interfases/order.interfaces';
 import {
-    CommentRepository,
     commentRepository,
+    CommentRepository,
 } from '../repository/comment.repository';
-// import { userRepository, UserRepository } from '../repository/user.repository';
+import { IComment } from '../interfases/commmet.interfaces';
+import {
+    orderRepository,
+    OrderRepository,
+} from '../repository/order.repository';
 
 export class CommentService {
     constructor(
         private commentRepository: CommentRepository,
-        // private userRepository: UserRepository,
+        private orderRepository: OrderRepository,
     ) {}
 
-    async getAll(
-        page: number,
-        limit: number,
-        sort: string,
-    ): Promise<IOrderList> {
-        const orders = await this.commentRepository.getAll(page, limit, sort);
-        if (!orders) {
+    async post(
+        dto: IComment,
+        userId: string,
+        orderId: string,
+    ): Promise<IComment> {
+        const comment = await this.commentRepository.post(dto, userId);
+        if (!comment) {
             throw new BaseError(
-                'Orders not found',
-                'getAll.OrderService',
-                status.CONFLICT,
-            );
-        }
-        return orders;
-    }
-
-    async post(dto: IOrder): Promise<IOrder> {
-        const order = await this.commentRepository.post(dto);
-        if (!order._id) {
-            throw new BaseError(
-                'Order not created',
-                'post.OrderService',
+                'Comment not created',
+                'post.CommentService',
                 status.UNPROCESSABLE_ENTITY,
                 'Server error',
             );
         }
-        return order;
-    }
-
-    async getById(id: string): Promise<IOrder> {
-        const order = await this.commentRepository.getById(id);
+        const order = await this.orderRepository.addComment(
+            orderId,
+            comment._id,
+        );
         if (!order) {
             throw new BaseError(
-                'Order not found',
-                'getById.OrderService',
+                'Order not updated',
+                'post.CommentService',
+                status.UNPROCESSABLE_ENTITY,
+                'Server error',
+            );
+        }
+        return comment;
+    }
+
+    async getById(id: string): Promise<IComment> {
+        const comment = await this.commentRepository.getById(id);
+        if (!comment) {
+            throw new BaseError(
+                'Comment not found',
+                'getById.CommentService',
                 status.CONFLICT,
             );
         }
-        return order;
+        return comment;
     }
 
-    async delete(id: string): Promise<IOrder | null> {
-        const deletedOrder = await this.commentRepository.delete(id);
-        if (!deletedOrder) {
+    async delete(id: string): Promise<IComment | null> {
+        const deletedComment = await this.commentRepository.delete(id);
+        if (!deletedComment) {
             throw new BaseError(
-                'Order is not deleted',
-                'delete.OrderService',
+                'Comment is not deleted',
+                'delete.CommentService',
                 status.UNPROCESSABLE_ENTITY,
             );
         }
-        return deletedOrder;
-
-        // const order = await this.orderRepository.getById(id);
-        // if (!order) {
-        //     throw new BaseError(
-        //         'Order not found',
-        //         'deleteById.OrderService',
-        //         status.CONFLICT,
-        //     );
-        // }
-        // return await this.orderRepository.delete(id);
+        return deletedComment;
     }
 
-    async update(id: string, dto: IOrder): Promise<IOrder> {
-        const updatedOrder = await this.commentRepository.update(id, dto);
-        if (!updatedOrder) {
+    async update(id: string, dto: IComment): Promise<IComment> {
+        const updatedComment = await this.commentRepository.update(id, dto);
+        if (!updatedComment) {
             throw new BaseError(
-                'Order is not updated',
-                'update.OrderService',
+                'Comment is not updated',
+                'update.CommentService',
                 status.UNPROCESSABLE_ENTITY,
             );
         }
-        return updatedOrder;
+        return updatedComment;
     }
 }
 
-export const commentService = new CommentService(commentRepository);
+export const commentService = new CommentService(
+    commentRepository,
+    orderRepository,
+);

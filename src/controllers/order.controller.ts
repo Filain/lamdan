@@ -25,7 +25,16 @@ class OrderController {
     ): Promise<void> => {
         try {
             const query = req.query as IOrderQuery;
-            const orders = await this.orderService.getAll(query);
+            const userId = req.user?.userId;
+            if (!userId) {
+                throw new BaseError(
+                    'User not logged in or not found',
+                    'OrderController.post',
+                    status.NOT_FOUND,
+                    'User not found',
+                );
+            }
+            const orders = await this.orderService.getAll(query, userId);
 
             if (orders) {
                 SuccessHandler.ok(res, orders);

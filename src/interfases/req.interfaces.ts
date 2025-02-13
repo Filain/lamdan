@@ -12,7 +12,7 @@ import { IOrderQuery } from './order.interfaces';
 // }
 
 export interface CustomRequestBody<T> extends Request<unknown, unknown, T> {
-    user?: { userId: string }; // Додай user, якщо використовуєш авторизацію
+    user?: { userId: string; userRole: string }; // Додай user, якщо використовуєш авторизацію
     body: T;
 }
 // export interface CustomQueryRequest
@@ -21,7 +21,7 @@ export interface CustomRequestBody<T> extends Request<unknown, unknown, T> {
 // }
 
 export interface CustomQueryRequest extends Request {
-    user?: { userId: string };
+    user?: { userId: string; userRole: string };
     query: Record<string, never> & IOrderQuery;
 }
 
@@ -33,7 +33,15 @@ export interface CustomQueryRequest extends Request {
 // }
 
 export interface CustomRequestParams<Params = unknown> extends Request<Params> {
+    user?: { userId: string; userRole: string };
     params: Params;
+}
+
+export interface CustomRequestParamsBody<Params = unknown, Body = unknown>
+    extends Request<Params, never, Body> {
+    user?: { userId: string; userRole: string }; // Додаткові поля для користувача
+    params: Params; // Параметри з URL
+    body: Body; // Тіло запиту (наприклад, POST дані)
 }
 
 export interface LoginRequestBody<T> extends Request<unknown, unknown, T> {

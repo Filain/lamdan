@@ -18,8 +18,8 @@ export class OrderService {
         // private userRepository: UserRepository,
     ) {}
 
-    async getAll(query: IOrderQuery): Promise<IOrderList> {
-        const orders = await this.orderRepository.getAll(query);
+    async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
+        const orders = await this.orderRepository.getAll(query, userId);
         if (!orders) {
             throw new BaseError(
                 'Orders not found',

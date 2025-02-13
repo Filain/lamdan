@@ -1,4 +1,4 @@
-import { FilterQuery, SortOrder } from 'mongoose';
+import { FilterQuery, SortOrder, Types } from 'mongoose';
 
 import {
     IOrder,
@@ -8,7 +8,7 @@ import {
 import ordersModel from '../models/orders.model';
 
 export class OrderRepository {
-    async getAll(query: IOrderQuery): Promise<IOrderList> {
+    async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
         let page = parseInt(query?.page as string) || 1;
         let limit = parseInt(query?.limit as string) || 10;
         if (page < 1) page = 1;
@@ -52,8 +52,9 @@ export class OrderRepository {
         if (query.group) {
             filterObj.group = query.group;
         }
-        if (query.my) {
-            filterObj.my = query.my;
+
+        if (query.my === 'true') {
+            filterObj.manager = userId;
         }
 
         // Динамічне сортування
@@ -88,6 +89,18 @@ export class OrderRepository {
     async update(id: string, dto: IOrder): Promise<IOrder | null> {
         return await ordersModel
             .findByIdAndUpdate(id, dto, { new: true })
+            .exec();
+    }
+    async addComment(
+        id: string,
+        commentId: Types.ObjectId | undefined,
+    ): Promise<IOrder | null> {
+        return await ordersModel
+            .findByIdAndUpdate(
+                id,
+                { $push: { comment: commentId } }, // Додаємо коментар в масив
+                { new: true }, // Повертаємо оновлений документ
+            )
             .exec();
     }
 }

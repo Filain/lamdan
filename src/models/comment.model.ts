@@ -4,10 +4,7 @@ const commentSchema = new mongoose.Schema(
     {
         comment: {
             type: String,
-        },
-        created: {
-            type: Date,
-            default: Date.now,
+            required: true,
         },
         commentedBy: {
             type: mongoose.Schema.Types.ObjectId,

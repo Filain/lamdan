@@ -2,24 +2,26 @@ import { NextFunction, Response } from 'express';
 import status from 'http-status';
 
 import SuccessHandler from '../handlers/success.handler';
-import { IOrder } from '../interfases/order.interfaces';
 import { BaseError } from '../errors/base.error';
 import {
-    CustomRequestBody,
     CustomRequestParams,
+    CustomRequestParamsBody,
 } from '../interfases/req.interfaces';
 import { CommentService, commentService } from '../services/comment.service';
+import { IComment } from '../interfases/commmet.interfaces';
 
 class CommentController {
     constructor(private commentService: CommentService) {}
 
     post = async (
-        req: CustomRequestBody<IOrder>,
+        req: CustomRequestParamsBody<{ orderId: string }, IComment>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
-            if (!req.user) {
+            const userId = req.user?.userId;
+            const orderId = req.params.orderId;
+            if (!userId) {
                 throw new BaseError(
                     'User not logged in or not found',
                     'OrderController.post',
@@ -27,9 +29,13 @@ class CommentController {
                     'User not found',
                 );
             }
-            const orders = await this.commentService.post(req.body);
-            if (orders) {
-                SuccessHandler.created(res, orders);
+            const comment = await this.commentService.post(
+                req.body,
+                userId,
+                orderId,
+            );
+            if (comment) {
+                SuccessHandler.created(res, comment);
             }
         } catch (err) {
             next(err);
@@ -37,15 +43,17 @@ class CommentController {
     };
 
     getById = async (
-        req: CustomRequestParams<{ orderId: string }>,
+        req: CustomRequestParams<{ commentId: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const order = await this.commentService.getById(req.params.orderId);
+            const comment = await this.commentService.getById(
+                req.params.commentId,
+            );
 
-            if (order) {
-                SuccessHandler.created(res, order);
+            if (comment) {
+                SuccessHandler.created(res, comment);
             }
         } catch (err) {
             next(err);
@@ -53,12 +61,14 @@ class CommentController {
     };
 
     delete = async (
-        req: CustomRequestParams<{ orderId: string }>,
+        req: CustomRequestParams<{ commentId: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const order = await this.commentService.delete(req.params.orderId);
+            const order = await this.commentService.delete(
+                req.params.commentId,
+            );
             if (order) {
                 SuccessHandler.created(res, order);
             }
@@ -68,13 +78,13 @@ class CommentController {
     };
 
     update = async (
-        req: CustomRequestParams<{ orderId: string }>,
+        req: CustomRequestParams<{ commentId: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
             const order = await this.commentService.update(
-                req.params.orderId,
+                req.params.commentId,
                 req.body,
             );
             if (order) {
