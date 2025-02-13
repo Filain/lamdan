@@ -2,7 +2,11 @@ import { NextFunction, Response } from 'express';
 import status from 'http-status';
 
 import SuccessHandler from '../handlers/success.handler';
-import { IOrder, IOrderList } from '../interfases/order.interfaces';
+import {
+    IOrder,
+    IOrderList,
+    IOrderQuery,
+} from '../interfases/order.interfaces';
 import { orderService, OrderService } from '../services/order.service';
 import { BaseError } from '../errors/base.error';
 import {
@@ -20,14 +24,20 @@ class OrderController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const page = parseInt(req.query.page as string) || 1;
-            const limit = parseInt(req.query.limit as string) || 10;
-            const sort = (req.query.sort as string) || '-id';
-
-            const orders = await this.orderService.getAll(page, limit, sort);
+            const query = req.query as IOrderQuery;
+            const userId = req.user?.userId;
+            if (!userId) {
+                throw new BaseError(
+                    'User not logged in or not found',
+                    'OrderController.post',
+                    status.NOT_FOUND,
+                    'User not found',
+                );
+            }
+            const orders = await this.orderService.getAll(query, userId);
 
             if (orders) {
-                SuccessHandler.created(res, orders);
+                SuccessHandler.ok(res, orders);
             }
         } catch (err) {
             next(err);

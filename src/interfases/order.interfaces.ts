@@ -26,6 +26,23 @@ export interface IOrder {
     comment?: mongoose.Types.ObjectId[];
 }
 
+export interface IOrderQuery {
+    page?: string;
+    limit?: string;
+    sort?: string;
+    name: string;
+    surname: string;
+    email: string;
+    phone: string;
+    age: number;
+    course: string;
+    course_format: string;
+    course_type: string;
+    status: string;
+    group?: mongoose.Types.ObjectId;
+    my: string;
+}
+
 export type GetAllOrdersQuery = {
     page?: string;
     limit?: string;

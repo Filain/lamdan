@@ -5,7 +5,11 @@ import {
     orderRepository,
     OrderRepository,
 } from '../repository/order.repository';
-import { IOrder, IOrderList } from '../interfases/order.interfaces';
+import {
+    IOrder,
+    IOrderList,
+    IOrderQuery,
+} from '../interfases/order.interfaces';
 // import { userRepository, UserRepository } from '../repository/user.repository';
 
 export class OrderService {
@@ -14,12 +18,8 @@ export class OrderService {
         // private userRepository: UserRepository,
     ) {}
 
-    async getAll(
-        page: number,
-        limit: number,
-        sort: string,
-    ): Promise<IOrderList> {
-        const orders = await this.orderRepository.getAll(page, limit, sort);
+    async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
+        const orders = await this.orderRepository.getAll(query, userId);
         if (!orders) {
             throw new BaseError(
                 'Orders not found',
