@@ -1,5 +1,7 @@
 import { Request } from 'express';
 
+import { IOrderQuery } from './order.interfaces';
+
 // interface CustomRequest extends Request {
 //     user?: { userId: string; userRole: string };
 // }
@@ -13,10 +15,14 @@ export interface CustomRequestBody<T> extends Request<unknown, unknown, T> {
     user?: { userId: string }; // Додай user, якщо використовуєш авторизацію
     body: T;
 }
+// export interface CustomQueryRequest
+//     extends Request<ParamsDictionary, unknown, unknown, IOrderQuery> {
+//     user?: { userId: string; userRole: string };
+// }
 
 export interface CustomQueryRequest extends Request {
     user?: { userId: string };
-    query: { page: string; limit: string; sort: string };
+    query: Record<string, never> & IOrderQuery;
 }
 
 // export interface CustomQueryRequestBody<T>

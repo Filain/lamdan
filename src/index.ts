@@ -11,6 +11,7 @@ import { authRouter } from './routes/auth.routes';
 import { errorMiddleware } from './middleware/errorMiddleware';
 import userModel from './models/user.model';
 import { orderRouter } from './routes/order.routes';
+import { commentRouter } from './routes/comment.routes';
 
 const app: Application = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 // Маршрут для перевірки сервера
 app.use('/auth', authRouter);
 app.use('/order', orderRouter);
+app.use('/comment', commentRouter);
 
 async function createDefaultAdmin() {
     const existingAdmin = await userModel.findOne({ email: 'admin@gmail.com' });

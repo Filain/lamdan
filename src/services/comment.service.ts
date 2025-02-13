@@ -1,25 +1,25 @@
 import status from 'http-status';
 
 import { BaseError } from '../errors/base.error';
+import { IOrder, IOrderList } from '../interfases/order.interfaces';
 import {
-    orderRepository,
-    OrderRepository,
-} from '../repository/order.repository';
-import {
-    IOrder,
-    IOrderList,
-    IOrderQuery,
-} from '../interfases/order.interfaces';
+    CommentRepository,
+    commentRepository,
+} from '../repository/comment.repository';
 // import { userRepository, UserRepository } from '../repository/user.repository';
 
-export class OrderService {
+export class CommentService {
     constructor(
-        private orderRepository: OrderRepository,
+        private commentRepository: CommentRepository,
         // private userRepository: UserRepository,
     ) {}
 
-    async getAll(query: IOrderQuery): Promise<IOrderList> {
-        const orders = await this.orderRepository.getAll(query);
+    async getAll(
+        page: number,
+        limit: number,
+        sort: string,
+    ): Promise<IOrderList> {
+        const orders = await this.commentRepository.getAll(page, limit, sort);
         if (!orders) {
             throw new BaseError(
                 'Orders not found',
@@ -31,7 +31,7 @@ export class OrderService {
     }
 
     async post(dto: IOrder): Promise<IOrder> {
-        const order = await this.orderRepository.post(dto);
+        const order = await this.commentRepository.post(dto);
         if (!order._id) {
             throw new BaseError(
                 'Order not created',
@@ -44,7 +44,7 @@ export class OrderService {
     }
 
     async getById(id: string): Promise<IOrder> {
-        const order = await this.orderRepository.getById(id);
+        const order = await this.commentRepository.getById(id);
         if (!order) {
             throw new BaseError(
                 'Order not found',
@@ -56,7 +56,7 @@ export class OrderService {
     }
 
     async delete(id: string): Promise<IOrder | null> {
-        const deletedOrder = await this.orderRepository.delete(id);
+        const deletedOrder = await this.commentRepository.delete(id);
         if (!deletedOrder) {
             throw new BaseError(
                 'Order is not deleted',
@@ -78,7 +78,7 @@ export class OrderService {
     }
 
     async update(id: string, dto: IOrder): Promise<IOrder> {
-        const updatedOrder = await this.orderRepository.update(id, dto);
+        const updatedOrder = await this.commentRepository.update(id, dto);
         if (!updatedOrder) {
             throw new BaseError(
                 'Order is not updated',
@@ -90,4 +90,4 @@ export class OrderService {
     }
 }
 
-export const orderService = new OrderService(orderRepository);
+export const commentService = new CommentService(commentRepository);

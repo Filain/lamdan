@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface IOrderList {
-    data: IOrder[];
-    total: number;
-}
-
-export interface IOrder {
+export interface IComment {
     _id?: mongoose.Types.ObjectId;
     name: string;
     surname: string;
@@ -24,23 +19,6 @@ export interface IOrder {
     manager?: string;
     group?: mongoose.Types.ObjectId;
     comment?: mongoose.Types.ObjectId[];
-}
-
-export interface IOrderQuery {
-    page?: string;
-    limit?: string;
-    sort?: string;
-    name: string;
-    surname: string;
-    email: string;
-    phone: string;
-    age: number;
-    course: string;
-    course_format: string;
-    course_type: string;
-    status: string;
-    group?: mongoose.Types.ObjectId;
-    my: string;
 }
 
 export type GetAllOrdersQuery = {
