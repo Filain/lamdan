@@ -7,7 +7,6 @@ export class CommentRepository {
     async post(dto: IComment, userId: string): Promise<IComment> {
         // Перетворюємо userId на ObjectId для роботи з Mongoose
         const commentedBy = new mongoose.Types.ObjectId(userId);
-        // Створюємо коментар
         return await commentModel.create({ ...dto, commentedBy });
     }
 

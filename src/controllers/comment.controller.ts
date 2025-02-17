@@ -53,7 +53,7 @@ class CommentController {
             );
 
             if (comment) {
-                SuccessHandler.created(res, comment);
+                SuccessHandler.ok(res, comment);
             }
         } catch (err) {
             next(err);
@@ -70,7 +70,7 @@ class CommentController {
                 req.params.commentId,
             );
             if (order) {
-                SuccessHandler.created(res, order);
+                SuccessHandler.ok(res, order);
             }
         } catch (err) {
             next(err);
@@ -78,7 +78,7 @@ class CommentController {
     };
 
     update = async (
-        req: CustomRequestParams<{ commentId: string }>,
+        req: CustomRequestParamsBody<{ commentId: string }, IComment>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
@@ -88,7 +88,7 @@ class CommentController {
                 req.body,
             );
             if (order) {
-                SuccessHandler.created(res, order);
+                SuccessHandler.ok(res, order);
             }
         } catch (err) {
             next(err);

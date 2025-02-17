@@ -2,9 +2,9 @@ import { Request } from 'express';
 
 import { IOrderQuery } from './order.interfaces';
 
-// interface CustomRequest extends Request {
-//     user?: { userId: string; userRole: string };
-// }
+export interface CustomRequest extends Request {
+    user?: { userId: string; userRole: string };
+}
 //
 // export interface CustomBody2Request<T> extends Request {
 //     body: T;
