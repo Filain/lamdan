@@ -13,6 +13,7 @@ import userModel from './models/user.model';
 import { orderRouter } from './routes/order.routes';
 import { commentRouter } from './routes/comment.routes';
 import { groupRouter } from './routes/group.routes';
+import { exelRouter } from './routes/exel.routes';
 
 const app: Application = express();
 
@@ -29,6 +30,7 @@ app.use('/auth', authRouter);
 app.use('/order', orderRouter);
 app.use('/comment', commentRouter);
 app.use('/group', groupRouter);
+app.use('/exel', exelRouter);
 
 async function createDefaultAdmin() {
     const existingAdmin = await userModel.findOne({ email: 'admin@gmail.com' });

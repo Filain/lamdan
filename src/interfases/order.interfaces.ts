@@ -43,6 +43,8 @@ export interface IOrderQuery {
     my: string;
 }
 
+export type IOrderQueryExport = Omit<IOrderQuery, 'page' | 'limit'>;
+
 export type GetAllOrdersQuery = {
     page?: string;
     limit?: string;

@@ -4,6 +4,7 @@ import {
     IOrder,
     IOrderList,
     IOrderQuery,
+    IOrderQueryExport,
 } from '../interfases/order.interfaces';
 import ordersModel from '../models/orders.model';
 
@@ -102,6 +103,61 @@ export class OrderRepository {
                 { new: true }, // Повертаємо оновлений документ
             )
             .exec();
+    }
+
+    async getDataForExport(
+        query: IOrderQueryExport,
+        userId: string,
+    ): Promise<IOrder[]> {
+        const filterObj: FilterQuery<IOrder> = {};
+        // Додавання умов пошуку для кожного поля
+        if (query.name) {
+            filterObj.name = { $regex: query.name, $options: 'i' };
+        }
+        if (query.surname) {
+            filterObj.surname = { $regex: query.surname, $options: 'i' };
+        }
+        if (query.email) {
+            filterObj.email = { $regex: query.email, $options: 'i' };
+        }
+        if (query.phone) {
+            filterObj.phone = { $regex: query.phone, $options: 'i' };
+        }
+        if (query.age) {
+            filterObj.age = query.age; // або можна застосувати діапазон, якщо потрібно
+        }
+        if (query.course) {
+            filterObj.course = { $regex: query.course, $options: 'i' };
+        }
+        if (query.course_format) {
+            filterObj.course_format = {
+                $regex: query.course_format,
+                $options: 'i',
+            };
+        }
+        if (query.course_type) {
+            filterObj.course_type = {
+                $regex: query.course_type,
+                $options: 'i',
+            };
+        }
+        if (query.status) {
+            filterObj.status = { $regex: query.status, $options: 'i' };
+        }
+        if (query.group) {
+            filterObj.group = query.group;
+        }
+
+        if (query.my === 'true') {
+            filterObj.manager = userId;
+        }
+
+        // Динамічне сортування
+        let sortField = query?.sort?.replace('-', '') || 'id'; // Вибір поля для сортування
+        let sortOrder: SortOrder = query?.sort?.startsWith('-') ? -1 : 1; // Перевірка напрямку сортування
+        const sort: { [key: string]: SortOrder } = { [sortField]: sortOrder };
+
+        return await ordersModel.find(filterObj).sort(sort).exec();
     }
 }
 
