@@ -3,7 +3,7 @@ import joi from 'joi';
 import { regexConstant } from '../constants/regex.constant';
 
 export class UserValidator {
-    private static username = joi.string().min(3).max(20).trim();
+    private static username = joi.string().min(2).max(20).trim();
     private static age = joi.number().min(18).max(120);
     private static email = joi
         .string()
