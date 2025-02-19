@@ -13,6 +13,8 @@ export const config = {
     jwt_access_expires: process.env.JWT_ACCESS_EXPIRES || '15min',
     jwt_refresh_expires: process.env.JWT_REFRESH_EXPIRES || '1d',
 
+    jwt_action_expires: process.env.JWT_ACTION_EXPIRES || '30min',
+
     cookie_access_expires: process.env.JWT_ACCESS_EXPIRES
         ? +(process.env.JWT_ACCESS_EXPIRES + 1 * 60 * 1000)
         : 24 * 60 * 60 * 1000,
@@ -30,4 +32,6 @@ export const config = {
         : 15 * 60 * 1000,
     cookie_sameSite: process.env.COOKIE_SAMESITE || 'strict',
     cookie_secure: process.env.COOKIE_SECURE === 'true' ? true : false,
+    email_user: process.env.EMAIL_USER || 'project.for.test.and@gmail.com',
+    email_password: process.env.EMAIL_PASSWORD || 'hpsl saqz yvmg jbkt',
 };
