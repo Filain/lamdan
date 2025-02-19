@@ -6,7 +6,7 @@ export interface IUser {
     username?: string | null;
     email: string;
     password?: string | null;
-    role: 'user' | 'admin';
+    role: 'manager' | 'admin';
     isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
@@ -34,3 +34,21 @@ export interface TokenPayload extends JwtPayload {
 }
 
 export type AuthTokens = { accessToken: string; refreshToken: string };
+
+export interface IUserList {
+    data: IUser[];
+    total: number;
+}
+
+export type GetAllPaginationQuery = {
+    page?: string;
+    limit?: string;
+};
+
+export interface IStatistic {
+    total: number;
+    agree: number;
+    inWork: number;
+    disagree: number;
+    newOrders: number;
+}

@@ -14,6 +14,7 @@ import { orderRouter } from './routes/order.routes';
 import { commentRouter } from './routes/comment.routes';
 import { groupRouter } from './routes/group.routes';
 import { exelRouter } from './routes/exel.routes';
+import { adminRouter } from './routes/admin.routes';
 
 const app: Application = express();
 
@@ -27,6 +28,7 @@ app.use(express.json());
 
 // Маршрут для перевірки сервера
 app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
 app.use('/order', orderRouter);
 app.use('/comment', commentRouter);
 app.use('/group', groupRouter);

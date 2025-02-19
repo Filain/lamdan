@@ -7,6 +7,7 @@ import {
     IOrderQueryExport,
 } from '../interfases/order.interfaces';
 import ordersModel from '../models/orders.model';
+import { IStatistic } from '../interfases/user.interfaces';
 
 export class OrderRepository {
     async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
@@ -158,6 +159,22 @@ export class OrderRepository {
         const sort: { [key: string]: SortOrder } = { [sortField]: sortOrder };
 
         return await ordersModel.find(filterObj).sort(sort).exec();
+    }
+    async statistics(): Promise<IStatistic> {
+        const total = await ordersModel.countDocuments();
+        const agree = await ordersModel.countDocuments({ status: 'agree' });
+        const inWork = await ordersModel.countDocuments({ status: 'inWork' });
+        const disagree = await ordersModel.countDocuments({
+            status: 'disagree',
+        });
+        const newOrders = await ordersModel.countDocuments({ status: 'new' });
+        return {
+            total,
+            agree,
+            inWork,
+            disagree,
+            newOrders,
+        };
     }
 }
 

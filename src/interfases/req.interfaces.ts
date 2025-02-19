@@ -1,6 +1,7 @@
 import { Request } from 'express';
 
 import { IOrderQuery } from './order.interfaces';
+import { GetAllPaginationQuery } from './user.interfaces';
 
 export interface CustomRequest extends Request {
     user?: { userId: string; userRole: string };
@@ -23,6 +24,11 @@ export interface CustomRequestBody<T> extends Request<unknown, unknown, T> {
 export interface CustomQueryRequest extends Request {
     user?: { userId: string; userRole: string };
     query: Record<string, never> & IOrderQuery;
+}
+
+export interface CustomQueryPaginatedRequest extends Request {
+    user?: { userId: string; userRole: string };
+    query: Record<string, never> & GetAllPaginationQuery;
 }
 
 // export interface CustomQueryRequestBody<T>

@@ -2,7 +2,11 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
     {
-        username: {
+        name: {
+            type: String,
+            trim: true,
+        },
+        surname: {
             type: String,
             trim: true,
         },
@@ -20,20 +24,17 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
+            enum: ['manager', 'admin'],
+            default: 'manager',
         },
         isActive: {
             type: Boolean,
             default: true,
         },
-
-        // orders: [
-        //     {
-        //         type: mongoose.Schema.Types.ObjectId,
-        //         ref: 'Orders',
-        //     },
-        // ],
+        isBanned: {
+            type: Boolean,
+            default: true,
+        },
     },
     { timestamps: true, versionKey: false },
 );
