@@ -16,7 +16,6 @@ import { groupRouter } from './routes/group.routes';
 import { exelRouter } from './routes/exel.routes';
 import { adminRouter } from './routes/admin.routes';
 import { RoleEnum } from './enums/role.enum';
-import { bannedMiddleware } from './middleware/banned.middleware';
 
 const app: Application = express();
 
@@ -27,8 +26,6 @@ const { port, dbUser, dbPassword, dbName, bcryptSaltRounds } = config;
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use(bannedMiddleware);
 
 // Маршрут для перевірки сервера
 app.use('/auth', authRouter);
