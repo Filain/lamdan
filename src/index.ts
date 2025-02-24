@@ -8,19 +8,20 @@ import { config } from './config/config';
 import { ErrorHandler } from './errors/handler.error';
 import Logger from './libs/winston/logger';
 import { authRouter } from './routes/auth.routes';
-import { errorMiddleware } from './middleware/errorMiddleware';
+import { errorMiddleware } from './middleware/error.middleware';
 import userModel from './models/user.model';
 import { orderRouter } from './routes/order.routes';
 import { commentRouter } from './routes/comment.routes';
 import { groupRouter } from './routes/group.routes';
 import { exelRouter } from './routes/exel.routes';
 import { adminRouter } from './routes/admin.routes';
+import { RoleEnum } from './enums/role.enum';
 
 const app: Application = express();
 
 const errorHandler = new ErrorHandler(Logger);
 
-const { port, dbUser, dbPassword, dbName } = config;
+const { port, dbUser, dbPassword, dbName, bcryptSaltRounds } = config;
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -37,11 +38,11 @@ app.use('/exel', exelRouter);
 async function createDefaultAdmin() {
     const existingAdmin = await userModel.findOne({ email: 'admin@gmail.com' });
     if (!existingAdmin) {
-        const hashedPassword = await bcrypt.hash('admin', 10);
+        const hashedPassword = await bcrypt.hash('admin', bcryptSaltRounds);
         await userModel.create({
             email: 'admin@gmail.com',
             password: hashedPassword,
-            role: 'admin',
+            role: RoleEnum.ADMIN,
         });
         Logger.info('👨 Default admin user created');
     }

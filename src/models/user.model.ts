@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+import { RoleEnum } from '../enums/role.enum';
+import { regexConstant } from '../constants/regex.constant';
+
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -14,18 +17,15 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            match: [
-                /^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/,
-                'Please use a valid email address',
-            ],
+            match: [regexConstant.EMAIL, 'Please use a valid email address'],
         },
         password: {
             type: String,
         },
         role: {
             type: String,
-            enum: ['manager', 'admin'],
-            default: 'manager',
+            enum: RoleEnum,
+            default: RoleEnum.MANAGER,
         },
         isActive: {
             type: Boolean,
