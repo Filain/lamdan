@@ -6,15 +6,6 @@ import {
 } from '../interfases/user.interfaces';
 
 export class UserRepository {
-    // async post(userId: string, orderId: Types.ObjectId): Promise<IUser | null> {
-    //     return await userModel
-    //         .findByIdAndUpdate(
-    //             userId,
-    //             { $push: { orders: orderId } },
-    //             { new: true },
-    //         )
-    //         .exec();
-    // }
     async getAll(query: GetAllPaginationQuery): Promise<IUserList> {
         let page = parseInt(query?.page as string) || 1;
         let limit = parseInt(query?.limit as string) || 10;

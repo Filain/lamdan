@@ -1,13 +1,16 @@
 import mongoose from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
 
+import { RoleEnum } from '../enums/role.enum';
+
 export interface IUser {
     _id: mongoose.Types.ObjectId;
     username?: string | null;
     email: string;
     password?: string | null;
-    role: 'manager' | 'admin';
+    role: RoleEnum | string;
     isActive: boolean;
+    isBanned: boolean;
     createdAt?: Date;
     updatedAt?: Date;
     orders?: Array<mongoose.Types.ObjectId>;
