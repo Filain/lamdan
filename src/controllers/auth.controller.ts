@@ -8,6 +8,7 @@ import {
 import SuccessHandler from '../handlers/success.handler';
 import { authService, AuthService } from '../services/auth.service';
 import { LoginRequestBody } from '../interfases/req.interfaces';
+import { BaseError } from '../errors/base.error';
 
 class AuthController {
     constructor(private authService: AuthService) {}
@@ -34,6 +35,13 @@ class AuthController {
     ): Promise<void> => {
         try {
             const user = await this.authService.login(res, req.body);
+            if (!user.isActive) {
+                throw new BaseError(
+                    'Activate user',
+                    'AuthController.login',
+                    403,
+                );
+            }
             if (user) {
                 SuccessHandler.ok(res, { data: user });
             }
