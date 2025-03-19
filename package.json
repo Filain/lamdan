@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node src/index.ts",
+    "start": "node dist/index.js",
     "dev": "rimraf dist && tsc-watch --onSuccess \"npm run watch:server\"",
     "watch:server": "nodemon --watch \"./src\" --exec \"ts-node ./src/index.ts\"",
     "lint": "eslint .",
