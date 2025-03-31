@@ -10,13 +10,17 @@ export class UserValidator {
         .lowercase()
         .trim()
         .regex(regexConstant.EMAIL);
-    private static password = joi.string().trim().regex(regexConstant.PASSWORD);
+    private static passwordSingUp = joi
+        .string()
+        .trim()
+        .regex(regexConstant.PASSWORD);
+    private static passwordSingIn = joi.string().trim();
     private static phone = joi.string().trim().regex(regexConstant.PHONE);
 
     public static create = joi.object({
         name: this.username,
         email: this.email.required(),
-        password: this.password.required(),
+        password: this.passwordSingUp.required(),
     });
 
     public static update = joi.object({
@@ -27,12 +31,12 @@ export class UserValidator {
 
     public static signIn = joi.object({
         email: this.email.required(),
-        password: this.password.required(),
+        password: this.passwordSingIn.required(),
     });
 
     public static changePassword = joi.object({
-        oldPassword: this.password.required(),
-        password: this.password.required(),
+        oldPassword: this.passwordSingUp.required(),
+        password: this.passwordSingUp.required(),
     });
 
     public static listQuery = joi.object({

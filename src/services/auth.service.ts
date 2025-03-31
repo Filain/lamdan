@@ -110,6 +110,26 @@ export class AuthService {
         const tokens = this.createTokens({ uid, role });
         this.setupCookies(response, tokens);
     }
+    getMe(accessToken: string | undefined): Promise<IUser | null> {
+        if (!accessToken) {
+            throw new BaseError(
+                'User GetMe failed',
+                'AuthService.getMe',
+                status.NOT_FOUND,
+            );
+        }
+        const JWTdecoded = jwt.verify(accessToken, config.jwt_secret);
+
+        if (!this.isTokenPayload(JWTdecoded)) {
+            throw new BaseError(
+                'User GetMe failed',
+                'AuthService.getMe',
+                status.NOT_FOUND,
+            );
+        }
+        const { uid } = JWTdecoded;
+        return this.authRepository.findUserById(uid);
+    }
 
     private setupCookies(
         response: Response,

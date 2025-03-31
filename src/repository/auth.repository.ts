@@ -19,6 +19,9 @@ export class AuthRepository {
         await userModel.updateOne({ _id: userId }, { password }).exec();
         return user;
     }
+    async findUserById(userId: string): Promise<IUser | null> {
+        return await userModel.findById(userId).exec();
+    }
 }
 
 export const authRepository = new AuthRepository();

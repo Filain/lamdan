@@ -78,6 +78,22 @@ class AuthController {
             next(err);
         }
     };
+
+    getMe = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        const { accessToken } = req.cookies;
+        try {
+            const user = this.authService.getMe(accessToken);
+            if (user) {
+                SuccessHandler.ok(res, { data: user });
+            }
+        } catch (err) {
+            next(err);
+        }
+    };
 }
 
 export const authController = new AuthController(authService);

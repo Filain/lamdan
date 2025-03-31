@@ -24,4 +24,6 @@ router.post(
     authController.refresh,
 );
 
+router.get('/me', authMiddleware.checkAccessToken, authController.getMe);
+
 export const authRouter = router;

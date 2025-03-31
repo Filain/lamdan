@@ -3,6 +3,7 @@ import 'dotenv/config';
 import * as mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import bcrypt from 'bcrypt';
+import cors from 'cors';
 
 import { config } from './config/config';
 import { ErrorHandler } from './errors/handler.error';
@@ -26,6 +27,15 @@ const { port, dbUser, dbPassword, dbName, bcryptSaltRounds } = config;
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+    cors({
+        credentials: true,
+        origin: ['http://localhost:3000'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Cookie'],
+        exposedHeaders: ['set-cookie'],
+    }),
+);
 
 // Маршрут для перевірки сервера
 app.use('/auth', authRouter);
