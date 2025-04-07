@@ -29,8 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
     cors({
-        credentials: true,
         origin: ['http://localhost:3000'],
+        credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Cookie'],
         exposedHeaders: ['set-cookie'],
@@ -53,6 +53,8 @@ async function createDefaultAdmin() {
             email: 'admin@gmail.com',
             password: hashedPassword,
             role: RoleEnum.ADMIN,
+            isActive: true,
+            isBanned: false,
         });
         Logger.info('👨 Default admin user created');
     }

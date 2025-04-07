@@ -58,7 +58,9 @@ class OrderController {
                     'User not found',
                 );
             }
-            const orders = await this.orderService.post(req.body);
+            const userId = req.user?.userId;
+            const orders = await this.orderService.post(req.body, userId);
+
             if (orders) {
                 SuccessHandler.created(res, orders);
             }

@@ -19,8 +19,12 @@ export class AuthRepository {
         await userModel.updateOne({ _id: userId }, { password }).exec();
         return user;
     }
-    async findUserById(userId: string): Promise<IUser | null> {
-        return await userModel.findById(userId).exec();
+    async findUserById(userId: string): Promise<IUser> {
+        const user = await userModel.findById(userId).exec();
+        if (!user) {
+            throw new BaseError('User not found', 'findUserById', 404);
+        }
+        return user;
     }
 }
 

@@ -110,7 +110,7 @@ export class AuthService {
         const tokens = this.createTokens({ uid, role });
         this.setupCookies(response, tokens);
     }
-    getMe(accessToken: string | undefined): Promise<IUser | null> {
+    async getMe(accessToken: string | undefined): Promise<IUser> {
         if (!accessToken) {
             throw new BaseError(
                 'User GetMe failed',
@@ -128,7 +128,9 @@ export class AuthService {
             );
         }
         const { uid } = JWTdecoded;
-        return this.authRepository.findUserById(uid);
+        const user = await this.authRepository.findUserById(uid);
+
+        return user;
     }
 
     private setupCookies(

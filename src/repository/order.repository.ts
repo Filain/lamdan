@@ -12,7 +12,7 @@ import { IStatistic } from '../interfases/user.interfaces';
 export class OrderRepository {
     async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
         let page = parseInt(query?.page as string) || 1;
-        let limit = parseInt(query?.limit as string) || 10;
+        let limit = parseInt(query?.limit as string) || 25;
         if (page < 1) page = 1;
         if (limit < 1) limit = 10;
 
@@ -76,8 +76,11 @@ export class OrderRepository {
         return { data: orderData, total };
     }
 
-    async post(dto: IOrder): Promise<IOrder> {
-        return await ordersModel.create(dto);
+    async post(dto: IOrder, manager: string): Promise<IOrder> {
+        return await ordersModel.create({
+            ...dto,
+            manager,
+        });
     }
 
     async getById(id: string): Promise<IOrder | null> {

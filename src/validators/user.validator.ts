@@ -18,7 +18,8 @@ export class UserValidator {
     private static phone = joi.string().trim().regex(regexConstant.PHONE);
 
     public static create = joi.object({
-        name: this.username,
+        name: this.username.required(),
+        surname: this.username.required(),
         email: this.email.required(),
         password: this.passwordSingUp.required(),
     });

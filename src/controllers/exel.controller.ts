@@ -18,7 +18,6 @@ class ExelController {
         try {
             const query = req.query as IOrderQuery;
             const userId = req.user?.userId;
-            // const userId: string = '67ab4b44e0758afef06d56a7';
 
             if (!userId) {
                 throw new BaseError(

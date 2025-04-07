@@ -10,12 +10,13 @@ import {
     IOrderList,
     IOrderQuery,
 } from '../interfases/order.interfaces';
+import { userRepository, UserRepository } from '../repository/user.repository';
 // import { userRepository, UserRepository } from '../repository/user.repository';
 
 export class OrderService {
     constructor(
         private orderRepository: OrderRepository,
-        // private userRepository: UserRepository,
+        private userRepository: UserRepository,
     ) {}
 
     async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
@@ -30,8 +31,11 @@ export class OrderService {
         return orders;
     }
 
-    async post(dto: IOrder): Promise<IOrder> {
-        const order = await this.orderRepository.post(dto);
+    async post(dto: IOrder, userId: string): Promise<IOrder> {
+        const manager = await this.userRepository.getById(userId);
+        console.log(manager);
+        const order = await this.orderRepository.post(dto, manager?.name || '');
+
         if (!order._id) {
             throw new BaseError(
                 'Order not created',
@@ -90,4 +94,4 @@ export class OrderService {
     }
 }
 
-export const orderService = new OrderService(orderRepository);
+export const orderService = new OrderService(orderRepository, userRepository);

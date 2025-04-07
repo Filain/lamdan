@@ -43,7 +43,7 @@ class AuthController {
                 );
             }
             if (user) {
-                SuccessHandler.ok(res, { data: user });
+                SuccessHandler.ok(res, user);
             }
         } catch (err) {
             next(err);
@@ -86,9 +86,9 @@ class AuthController {
     ): Promise<void> => {
         const { accessToken } = req.cookies;
         try {
-            const user = this.authService.getMe(accessToken);
+            const user = await this.authService.getMe(accessToken);
             if (user) {
-                SuccessHandler.ok(res, { data: user });
+                SuccessHandler.ok(res, user);
             }
         } catch (err) {
             next(err);

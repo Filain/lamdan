@@ -5,7 +5,8 @@ import { RoleEnum } from '../enums/role.enum';
 
 export interface IUser {
     _id: mongoose.Types.ObjectId;
-    username?: string | null;
+    name?: string | null;
+    surname?: string | null;
     email: string;
     password?: string | null;
     role: RoleEnum | string;
@@ -13,8 +14,6 @@ export interface IUser {
     isBanned: boolean;
     createdAt?: Date;
     updatedAt?: Date;
-    orders?: Array<mongoose.Types.ObjectId>;
-    __v?: number;
 }
 
 export interface ICreateUserRequestBody {
