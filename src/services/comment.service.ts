@@ -22,7 +22,7 @@ export class CommentService {
         userId: string,
         orderId: string,
     ): Promise<IComment> {
-        const comment = await this.commentRepository.post(dto, userId);
+        const comment = await this.commentRepository.post(dto, userId, orderId);
         if (!comment) {
             throw new BaseError(
                 'Comment not created',
@@ -44,6 +44,10 @@ export class CommentService {
             );
         }
         return comment;
+    }
+
+    async getAll(orderId: string): Promise<IComment[]> {
+        return await this.commentRepository.getAll(orderId);
     }
 
     async getById(id: string): Promise<IComment> {

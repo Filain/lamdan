@@ -55,6 +55,8 @@ async function createDefaultAdmin() {
             role: RoleEnum.ADMIN,
             isActive: true,
             isBanned: false,
+            name: 'Admin',
+            surname: 'Super',
         });
         Logger.info('👨 Default admin user created');
     }

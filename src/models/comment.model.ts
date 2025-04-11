@@ -6,6 +6,11 @@ const commentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        order: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order',
+            required: true,
+        },
         commentedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

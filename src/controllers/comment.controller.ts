@@ -42,6 +42,22 @@ class CommentController {
         }
     };
 
+    getAll = async (
+        req: CustomRequestParams<{ orderId: string }>,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        const orderId = req.params.orderId;
+        try {
+            const comments = await this.commentService.getAll(orderId);
+            if (comments) {
+                SuccessHandler.ok(res, comments);
+            }
+        } catch (err) {
+            next(err);
+        }
+    };
+
     getById = async (
         req: CustomRequestParams<{ commentId: string }>,
         res: Response,
@@ -82,6 +98,7 @@ class CommentController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
+
         try {
             const order = await this.commentService.update(
                 req.params.commentId,

@@ -92,21 +92,35 @@ export class OrderRepository {
     }
 
     async update(id: string, dto: IOrder): Promise<IOrder | null> {
-        return await ordersModel
-            .findByIdAndUpdate(id, dto, { new: true })
-            .exec();
+        if (dto.email) {
+            const existing = await ordersModel.findOne({ email: dto.email });
+
+            if (existing && existing._id.toString() !== id) {
+                throw new Error('This email is already taken');
+            }
+        }
+
+        if (dto?.group?.toString() === '') {
+            dto.group = null;
+        }
+
+        const updated = await ordersModel
+            .findByIdAndUpdate(id, dto, { new: true });
+        return updated ? updated.toObject<IOrder>() : null;
     }
     async addComment(
-        id: string,
+        _id: string,
         commentId: Types.ObjectId | undefined,
     ): Promise<IOrder | null> {
+
         return await ordersModel
             .findByIdAndUpdate(
-                id,
+                _id,
                 { $push: { comment: commentId } }, // Додаємо коментар в масив
                 { new: true }, // Повертаємо оновлений документ
             )
             .exec();
+
     }
 
     async getDataForExport(

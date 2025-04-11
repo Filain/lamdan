@@ -33,7 +33,6 @@ export class OrderService {
 
     async post(dto: IOrder, userId: string): Promise<IOrder> {
         const manager = await this.userRepository.getById(userId);
-        console.log(manager);
         const order = await this.orderRepository.post(dto, manager?.name || '');
 
         if (!order._id) {

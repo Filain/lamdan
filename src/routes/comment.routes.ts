@@ -11,6 +11,12 @@ router.post(
     commentController.post,
 );
 router.get(
+    '/:orderId',
+    authMiddleware.checkAccessToken,
+    commentController.getAll,
+);
+
+router.get(
     '/:commentId',
     authMiddleware.checkAccessToken,
     commentController.getById,

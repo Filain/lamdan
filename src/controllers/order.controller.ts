@@ -105,6 +105,8 @@ class OrderController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
+        console.log(req.body);
+        console.log(req.params.orderId);
         try {
             const order = await this.orderService.update(
                 req.params.orderId,
