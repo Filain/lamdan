@@ -105,12 +105,20 @@ class OrderController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
-        console.log(req.body);
-        console.log(req.params.orderId);
         try {
+            const userId = req.user?.userId;
+            if (!userId) {
+                throw new BaseError(
+                    'User not logged in or not found',
+                    'OrderController.post',
+                    status.NOT_FOUND,
+                    'User not found',
+                );
+            }
             const order = await this.orderService.update(
                 req.params.orderId,
                 req.body,
+                userId,
             );
             if (order) {
                 SuccessHandler.created(res, order);

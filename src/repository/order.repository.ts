@@ -1,4 +1,4 @@
-import { FilterQuery, SortOrder, Types } from 'mongoose';
+import mongoose, { FilterQuery, SortOrder, Types } from 'mongoose';
 
 import {
     IOrder,
@@ -8,6 +8,7 @@ import {
 } from '../interfases/order.interfaces';
 import ordersModel from '../models/orders.model';
 import { IStatistic } from '../interfases/user.interfaces';
+import { groupRepository } from './group.repository';
 
 export class OrderRepository {
     async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
@@ -52,11 +53,11 @@ export class OrderRepository {
             filterObj.status = { $regex: query.status, $options: 'i' };
         }
         if (query.group) {
-            filterObj.group = query.group;
+            filterObj.group = await groupRepository.findByName(query.group);
         }
 
         if (query.my === 'true') {
-            filterObj.manager = userId;
+            filterObj.manager = new mongoose.Types.ObjectId(userId);
         }
 
         // Динамічне сортування
@@ -69,11 +70,13 @@ export class OrderRepository {
             .sort(sort)
             .skip((page - 1) * limit)
             .limit(limit)
+            .populate('group')
+            .populate('manager')
             .exec();
         const totalOrders = await ordersModel.countDocuments(filterObj);
         const total = Math.ceil(totalOrders / limit);
 
-        return { data: orderData, total };
+        return { data: orderData.length ? orderData : [], total };
     }
 
     async post(dto: IOrder, manager: string): Promise<IOrder> {
@@ -91,7 +94,11 @@ export class OrderRepository {
         return await ordersModel.findByIdAndDelete(id).exec();
     }
 
-    async update(id: string, dto: IOrder): Promise<IOrder | null> {
+    async update(
+        id: string,
+        dto: IOrder,
+        userId: string,
+    ): Promise<IOrder | null> {
         if (dto.email) {
             const existing = await ordersModel.findOne({ email: dto.email });
 
@@ -104,15 +111,19 @@ export class OrderRepository {
             dto.group = null;
         }
 
-        const updated = await ordersModel
-            .findByIdAndUpdate(id, dto, { new: true });
+        if (dto.status === 'In work') {
+            dto.manager = new mongoose.Types.ObjectId(userId);
+        }
+
+        const updated = await ordersModel.findByIdAndUpdate(id, dto, {
+            new: true,
+        });
         return updated ? updated.toObject<IOrder>() : null;
     }
     async addComment(
         _id: string,
         commentId: Types.ObjectId | undefined,
     ): Promise<IOrder | null> {
-
         return await ordersModel
             .findByIdAndUpdate(
                 _id,
@@ -120,7 +131,6 @@ export class OrderRepository {
                 { new: true }, // Повертаємо оновлений документ
             )
             .exec();
-
     }
 
     async getDataForExport(

@@ -23,6 +23,13 @@ export class GroupRepository {
             .findByIdAndUpdate(id, dto, { new: true })
             .exec();
     }
+    async findByName(name: string): Promise<IGroup[]> {
+        const regex = new RegExp(
+            name.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+            'i',
+        );
+        return groupModel.find({ group: { $regex: regex } }).exec();
+    }
 }
 
 export const groupRepository = new GroupRepository();

@@ -21,7 +21,7 @@ export interface IOrder {
     utm?: string | null;
     msg?: string | null;
     status?: string | null;
-    manager?: string | null;
+    manager?: mongoose.Types.ObjectId | null;
     group?: mongoose.Types.ObjectId | null;
     comment?: mongoose.Types.ObjectId[] | null;
 }
@@ -39,10 +39,9 @@ export interface IOrderQuery {
     course_format: string;
     course_type: string;
     status: string;
-    group?: mongoose.Types.ObjectId;
+    group?: string;
     my: string;
 }
-
 
 export interface IOrderCreate {
     group: string | null;

@@ -11,7 +11,6 @@ import {
     IOrderQuery,
 } from '../interfases/order.interfaces';
 import { userRepository, UserRepository } from '../repository/user.repository';
-// import { userRepository, UserRepository } from '../repository/user.repository';
 
 export class OrderService {
     constructor(
@@ -80,8 +79,8 @@ export class OrderService {
         // return await this.orderRepository.delete(id);
     }
 
-    async update(id: string, dto: IOrder): Promise<IOrder> {
-        const updatedOrder = await this.orderRepository.update(id, dto);
+    async update(id: string, dto: IOrder, userId: string): Promise<IOrder> {
+        const updatedOrder = await this.orderRepository.update(id, dto, userId);
         if (!updatedOrder) {
             throw new BaseError(
                 'Order is not updated',

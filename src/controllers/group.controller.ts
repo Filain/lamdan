@@ -46,7 +46,7 @@ class GroupController {
     };
 
     post = async (
-        req: CustomRequestBody<IGroup>,
+        req: CustomRequestBody<{ group: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {

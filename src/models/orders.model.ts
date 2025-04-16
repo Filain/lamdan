@@ -17,7 +17,8 @@ const ordersSchema = new mongoose.Schema(
         msg: { type: String, default: null },
         status: { type: String, default: null },
         manager: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
             default: null,
         },
         group: {

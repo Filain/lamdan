@@ -15,7 +15,7 @@ router.get(
 );
 
 router.post(
-    '/:groupId',
+    '/',
     authMiddleware.checkAccessToken,
     checkUniqueMiddleware.group,
     groupController.post,

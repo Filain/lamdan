@@ -38,7 +38,7 @@ export class GroupService {
         const group = await this.groupRepository.post(dto);
         if (!group) {
             throw new BaseError(
-                'Comment not created',
+                'Group not created',
                 'post.GroupService',
                 status.UNPROCESSABLE_ENTITY,
                 'Server error',
