@@ -28,7 +28,7 @@ export class AuthService {
                 status.CONFLICT,
             );
         }
-        const hashPassword = await createHash(userData.password);
+        const hashPassword = await createHash(userData?.password ?? '');
         return await this.authRepository.registerUser({
             ...userData,
             password: hashPassword,

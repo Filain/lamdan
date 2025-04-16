@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import SuccessHandler from '../handlers/success.handler';
 import { IOrderList } from '../interfases/order.interfaces';
@@ -9,6 +9,7 @@ import {
     CustomRequestParamsBody,
 } from '../interfases/req.interfaces';
 import { adminService, AdminService } from '../services/admin.service';
+import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
 
 class AdminController {
     constructor(private adminService: AdminService) {}
@@ -118,6 +119,20 @@ class AdminController {
             );
             if (order) {
                 SuccessHandler.ok(res, order);
+            }
+        } catch (err) {
+            next(err);
+        }
+    };
+    create = async (
+        req: Request,
+        res: Response<ICreateAdminRequestBody>,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const user = await this.adminService.create(req.body);
+            if (user) {
+                SuccessHandler.created(res, user);
             }
         } catch (err) {
             next(err);

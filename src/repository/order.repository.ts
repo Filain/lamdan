@@ -189,12 +189,12 @@ export class OrderRepository {
     }
     async statistics(): Promise<IStatistic> {
         const total = await ordersModel.countDocuments();
-        const agree = await ordersModel.countDocuments({ status: 'agree' });
-        const inWork = await ordersModel.countDocuments({ status: 'inWork' });
+        const agree = await ordersModel.countDocuments({ status: 'Aggre' });
+        const inWork = await ordersModel.countDocuments({ status: 'In work' });
         const disagree = await ordersModel.countDocuments({
-            status: 'disagree',
+            status: 'Disaggre',
         });
-        const newOrders = await ordersModel.countDocuments({ status: 'new' });
+        const newOrders = await ordersModel.countDocuments({ status: 'New' });
         return {
             total,
             agree,

@@ -21,7 +21,6 @@ export class UserValidator {
         name: this.username.required(),
         surname: this.username.required(),
         email: this.email.required(),
-        password: this.passwordSingUp.required(),
     });
 
     public static update = joi.object({

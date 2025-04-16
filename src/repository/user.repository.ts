@@ -4,6 +4,7 @@ import {
     IUser,
     IUserList,
 } from '../interfases/user.interfaces';
+import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
 
 export class UserRepository {
     async getAll(query: GetAllPaginationQuery): Promise<IUserList> {
@@ -46,6 +47,7 @@ export class UserRepository {
             .exec();
     }
     async activateUser(userId: string): Promise<IUser | null> {
+        console.log(userId);
         return await userModel
             .findByIdAndUpdate(
                 { _id: userId },
@@ -62,6 +64,14 @@ export class UserRepository {
         return await userModel
             .findByIdAndUpdate({ _id: userId }, { password }, { new: true })
             .exec();
+    }
+
+    async create(user: ICreateAdminRequestBody): Promise<IUser> {
+        return await userModel.create(user);
+    }
+
+    async getByEmail(email: string): Promise<IUser | null> {
+        return await userModel.findOne({ email }).exec();
     }
 }
 

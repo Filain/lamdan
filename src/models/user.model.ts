@@ -29,11 +29,11 @@ const userSchema = new mongoose.Schema(
         },
         isActive: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         isBanned: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
     { timestamps: true, versionKey: false },

@@ -17,6 +17,7 @@ import {
 } from '../interfases/user.interfaces';
 import { emailService } from './email.service';
 import createHash from '../libs/bcrypt/createHash';
+import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
 
 export class AdminService {
     constructor(
@@ -148,6 +149,29 @@ export class AdminService {
             );
         }
         return changePassword;
+    }
+
+    async create(dto: ICreateAdminRequestBody): Promise<IUser> {
+        const isEmailExist = await this.userRepository.getByEmail(dto.email);
+
+        if (isEmailExist) {
+            throw new BaseError(
+                'Email is already taken',
+                'create.AdminService',
+                status.UNPROCESSABLE_ENTITY,
+                'Server error',
+            );
+        }
+        const user = await this.userRepository.create(dto);
+
+        if (!user) {
+            throw new BaseError(
+                'User not found',
+                'create.AdminService',
+                status.UNPROCESSABLE_ENTITY,
+            );
+        }
+        return user;
     }
 }
 

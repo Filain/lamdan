@@ -39,4 +39,6 @@ router.patch(
     adminController.changePassword,
 );
 
+router.post('/create', adminController.create);
+
 export const adminRouter = router;
