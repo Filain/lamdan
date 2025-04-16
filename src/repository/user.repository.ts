@@ -12,8 +12,10 @@ export class UserRepository {
         let limit = parseInt(query?.limit as string) || 10;
         if (page < 1) page = 1;
         if (limit < 1) limit = 10;
+
         const userData = await userModel
             .find()
+            .sort({ createdAt: -1 })
             .skip((page - 1) * limit)
             .limit(limit)
             .exec();

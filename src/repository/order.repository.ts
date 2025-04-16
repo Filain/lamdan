@@ -18,7 +18,6 @@ export class OrderRepository {
         if (limit < 1) limit = 10;
 
         const filterObj: FilterQuery<IOrder> = {};
-        // Додавання умов пошуку для кожного поля
         if (query.name) {
             filterObj.name = { $regex: query.name, $options: 'i' };
         }
@@ -138,7 +137,6 @@ export class OrderRepository {
         userId: string,
     ): Promise<IOrder[]> {
         const filterObj: FilterQuery<IOrder> = {};
-        // Додавання умов пошуку для кожного поля
         if (query.name) {
             filterObj.name = { $regex: query.name, $options: 'i' };
         }

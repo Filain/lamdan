@@ -39,6 +39,11 @@ router.patch(
     adminController.changePassword,
 );
 
-router.post('/create', adminController.create);
+router.post(
+    '/create',
+    authMiddleware.checkAccessToken,
+    roleMiddleware.isAdmin,
+    adminController.create,
+);
 
 export const adminRouter = router;
