@@ -24,6 +24,13 @@ export class OrderRepository {
         if (query.surname) {
             filterObj.surname = { $regex: query.surname, $options: 'i' };
         }
+        if (query.sum) {
+            filterObj.sum = query.sum;
+        }
+
+        if (query.already_paid) {
+            filterObj.already_paid = query.already_paid;
+        }
         if (query.email) {
             filterObj.email = { $regex: query.email, $options: 'i' };
         }
@@ -150,7 +157,14 @@ export class OrderRepository {
             filterObj.phone = { $regex: query.phone, $options: 'i' };
         }
         if (query.age) {
-            filterObj.age = query.age; // або можна застосувати діапазон, якщо потрібно
+            filterObj.age = query.age;
+        }
+        if (query.sum) {
+            filterObj.sum = query.sum;
+        }
+
+        if (query.already_paid) {
+            filterObj.already_paid = query.already_paid;
         }
         if (query.course) {
             filterObj.course = { $regex: query.course, $options: 'i' };
@@ -200,6 +214,16 @@ export class OrderRepository {
             disagree,
             newOrders,
         };
+    }
+    async inWork(userId: string): Promise<number> {
+        const id = new mongoose.Types.ObjectId(userId);
+        return await ordersModel
+            .countDocuments({ status: 'In work', manager: id })
+            .exec();
+    }
+    async total(userId: string): Promise<number> {
+        const id = new mongoose.Types.ObjectId(userId);
+        return await ordersModel.countDocuments({ manager: id }).exec();
     }
 }
 

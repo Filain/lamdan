@@ -74,6 +74,16 @@ export class UserRepository {
     async getByEmail(email: string): Promise<IUser | null> {
         return await userModel.findOne({ email }).exec();
     }
+
+    async update(
+        id: string,
+        inWork: number,
+        total: number,
+    ): Promise<IUser | null> {
+        return await userModel
+            .findByIdAndUpdate(id, { inWork, total }, { new: true })
+            .exec();
+    }
 }
 
 export const userRepository = new UserRepository();

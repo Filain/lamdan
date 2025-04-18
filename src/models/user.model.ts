@@ -39,6 +39,14 @@ const userSchema = new mongoose.Schema(
             type: Date,
             default: null,
         },
+        inWork: {
+            type: Number,
+            default: 0,
+        },
+        total: {
+            type: Number,
+            default: 0,
+        },
     },
     { timestamps: true, versionKey: false },
 );

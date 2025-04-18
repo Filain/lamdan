@@ -41,6 +41,8 @@ export interface IOrderQuery {
     status: string;
     group?: string;
     my: string;
+    sum: number;
+    already_paid: number;
 }
 
 export interface IOrderCreate {

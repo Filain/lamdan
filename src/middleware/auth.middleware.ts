@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import status from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload, TokenExpiredError } from 'jsonwebtoken';
 
 import { BaseError } from '../errors/base.error';
 import { config } from '../config/config';
@@ -58,7 +58,26 @@ class AuthMiddleware {
             req.user.userRole = role;
             next();
         } catch (e) {
-            next(e);
+            if (e instanceof TokenExpiredError) {
+                // Обробка помилки закінчення терміну дії токена
+                next(
+                    new BaseError(
+                        'Access token expired',
+                        'AuthMiddleware.checkAccessToken',
+                        status.UNAUTHORIZED,
+                    ),
+                );
+                // Тут ви можете додати логіку для відправки запиту на оновлення токена (залежно від вашої реалізації)
+            } else {
+                // Обробка інших помилок верифікації токена (наприклад, неправильний підпис)
+                next(
+                    new BaseError(
+                        'Invalid access token',
+                        'AuthMiddleware.checkAccessToken',
+                        status.FORBIDDEN,
+                    ),
+                );
+            }
         }
     }
 

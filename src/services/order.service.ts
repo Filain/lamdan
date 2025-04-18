@@ -80,8 +80,6 @@ export class OrderService {
     }
 
     async update(id: string, dto: IOrder, userId: string): Promise<IOrder> {
-
-        //TODO додати тут статистику до юзера
         const updatedOrder = await this.orderRepository.update(id, dto, userId);
         if (!updatedOrder) {
             throw new BaseError(
@@ -90,6 +88,14 @@ export class OrderService {
                 status.UNPROCESSABLE_ENTITY,
             );
         }
+
+        const inWork = await this.orderRepository.inWork(userId);
+        console.log('inWork', inWork);
+        const total = await this.orderRepository.total(userId);
+        console.log('total', total);
+        await this.userRepository.update(userId, inWork, total);
+
+        //TODO додати тут статистику до юзера
         return updatedOrder;
     }
 }

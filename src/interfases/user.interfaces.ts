@@ -12,6 +12,8 @@ export interface IUser {
     role: RoleEnum | string;
     isActive: boolean;
     isBanned: boolean;
+    inWork: number;
+    total: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
