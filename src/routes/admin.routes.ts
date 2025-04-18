@@ -13,6 +13,9 @@ router.get(
     roleMiddleware.isAdmin,
     adminController.getStatistics,
 );
+
+router.patch('/change-password', adminController.changePassword);
+
 router.patch(
     '/ban/:userId',
     authMiddleware.checkAccessToken,
@@ -30,13 +33,6 @@ router.post(
     authMiddleware.checkAccessToken,
     roleMiddleware.isAdmin,
     adminController.getActivationToken,
-);
-router.post('/activate/:token', adminController.activate);
-
-router.patch(
-    '/:userId',
-    authMiddleware.checkAccessToken,
-    adminController.changePassword,
 );
 
 router.post(

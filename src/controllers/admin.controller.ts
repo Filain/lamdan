@@ -5,8 +5,8 @@ import { IOrderList } from '../interfases/order.interfaces';
 import {
     CustomQueryPaginatedRequest,
     CustomRequest,
+    CustomRequestBody,
     CustomRequestParams,
-    CustomRequestParamsBody,
 } from '../interfases/req.interfaces';
 import { adminService, AdminService } from '../services/admin.service';
 import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
@@ -80,6 +80,7 @@ class AdminController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
+        console.log(req.params.userId);
         try {
             const order = await this.adminService.getActivationToken(
                 req.params.userId,
@@ -92,31 +93,17 @@ class AdminController {
         }
     };
 
-    activate = async (
-        req: CustomRequestParams<{ token: string }>,
-        res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        try {
-            const order = await this.adminService.activate(req.params.token);
-            if (order) {
-                SuccessHandler.created(res, order);
-            }
-        } catch (err) {
-            next(err);
-        }
-    };
-
     changePassword = async (
-        req: CustomRequestParamsBody<{ userId: string }, { password: string }>,
+        req: CustomRequestBody<{ token: string; password: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
             const order = await this.adminService.changePassword(
-                req.params.userId,
+                req.body.token,
                 req.body.password,
             );
+
             if (order) {
                 SuccessHandler.ok(res, order);
             }

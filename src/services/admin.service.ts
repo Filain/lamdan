@@ -79,6 +79,7 @@ export class AdminService {
         const actionToken = jwt.sign({ userId: id }, config.jwt_secret, {
             expiresIn: config.jwt_action_expires,
         });
+        console.log('getActivationToken', actionToken);
         if (!actionToken) {
             throw new BaseError(
                 'Action token not created',
@@ -87,7 +88,7 @@ export class AdminService {
                 'Server error action token not created',
             );
         }
-        const verificationLink = `http://localhost:${config.port}/active/:${actionToken}`;
+        const verificationLink = `${config.url}/active/${actionToken}`;
 
         const user = await this.userRepository.getById(id);
         if (!user) {
@@ -104,30 +105,21 @@ export class AdminService {
         );
     }
 
-    async activate(token: string): Promise<IUser> {
+    async changePassword(token: string, password: string): Promise<boolean> {
+        console.log('changePassword', token);
+
         const { userId } = jwt.verify(token, config.jwt_secret) as {
             userId: string;
         };
         if (!userId) {
             throw new BaseError(
                 'User not found',
-                'activate.AdminService',
+                'changePassword.AdminService',
                 status.UNPROCESSABLE_ENTITY,
+                'Server error',
             );
         }
-        const activatedUser = await this.userRepository.activateUser(userId);
-        if (!activatedUser) {
-            throw new BaseError(
-                'Order is not updated',
-                'update.AdminService',
-                status.UNPROCESSABLE_ENTITY,
-            );
-        }
-        return activatedUser;
-    }
-
-    async changePassword(id: string, password: string): Promise<IUser | null> {
-        const user = await this.userRepository.getById(id);
+        const user = await this.userRepository.getById(userId);
         if (!user) {
             throw new BaseError(
                 'User not found',
@@ -138,7 +130,7 @@ export class AdminService {
         }
         const hashPassword = await createHash(password as string);
         const changePassword = await this.userRepository.changePassword(
-            id,
+            userId,
             hashPassword,
         );
         if (!changePassword) {
@@ -148,7 +140,16 @@ export class AdminService {
                 status.UNPROCESSABLE_ENTITY,
             );
         }
-        return changePassword;
+
+        const activatedUser = await this.userRepository.activateUser(userId);
+        if (!activatedUser) {
+            throw new BaseError(
+                'Order is not updated',
+                'update.AdminService',
+                status.UNPROCESSABLE_ENTITY,
+            );
+        }
+        return true;
     }
 
     async create(dto: ICreateAdminRequestBody): Promise<IUser> {

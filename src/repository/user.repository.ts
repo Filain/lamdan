@@ -49,7 +49,6 @@ export class UserRepository {
             .exec();
     }
     async activateUser(userId: string): Promise<IUser | null> {
-        console.log(userId);
         return await userModel
             .findByIdAndUpdate(
                 { _id: userId },

@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import { ICreateUserRequestBody, IUser } from '../interfases/user.interfaces';
 import userModel from '../models/user.model';
 import { BaseError } from '../errors/base.error';
@@ -11,20 +13,22 @@ export class AuthRepository {
         return await userModel.findOne({ email }).exec();
     }
 
-    async updatePassword(userId: string, password: string): Promise<IUser> {
-        const user = await userModel.findById(userId).exec();
-        if (!user) {
-            throw new BaseError('User not found', 'updatePassword', 404);
-        }
-        await userModel.updateOne({ _id: userId }, { password }).exec();
-        return user;
-    }
     async findUserById(userId: string): Promise<IUser> {
         const user = await userModel.findById(userId).exec();
         if (!user) {
             throw new BaseError('User not found', 'findUserById', 404);
         }
         return user;
+    }
+
+    async lastLogin(userId: mongoose.Types.ObjectId): Promise<IUser | null> {
+        return await userModel
+            .findByIdAndUpdate(
+                { _id: userId },
+                { lastLogin: new Date() },
+                { new: true },
+            )
+            .exec();
     }
 }
 

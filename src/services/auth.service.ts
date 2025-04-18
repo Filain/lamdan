@@ -63,7 +63,7 @@ export class AuthService {
             role: user.role,
         });
         this.setupCookies(response, tokens);
-
+        await this.authRepository.lastLogin(user._id);
         return user;
     }
 

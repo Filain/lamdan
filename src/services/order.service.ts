@@ -80,6 +80,8 @@ export class OrderService {
     }
 
     async update(id: string, dto: IOrder, userId: string): Promise<IOrder> {
+
+        //TODO додати тут статистику до юзера
         const updatedOrder = await this.orderRepository.update(id, dto, userId);
         if (!updatedOrder) {
             throw new BaseError(
