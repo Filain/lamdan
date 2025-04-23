@@ -1,3 +1,11 @@
+# CRM Programming School - Backend
+
+## Description
+
+Backend part of a CRM system for managing applications in a programming school.
+
+Implemented using Node.js, Express, MongoDB (Atlas), with support for roles, authorization, and application processing.
+
 ### Installation
 
 1. Clone the repository:
@@ -17,18 +25,27 @@
 
 4. Create a .env file in the root of your project with the following content:
    ```code
-   PORT=5000
-   DB_URI=mongodb://127.0.0.1:27017/nerium
-   BUCKET_NAME = 
-   BUCKET_REGION = 
-   ACCESS_KEY_ID = 
-   SECRET_ACCESS_KEY= 
-   NODE_ENV_S3 = dev
-4. Run docker:
-   ```bash
-   docker-compose -f docker-compose-local.yaml up -d
+   PORT=5001
+   URL="http://localhost:3000"
 
-### Scripts
+   DB_USER=lamda
+   DB_PASSWORD=TUcDkfnHovkH4EET
+   DB_NAME=ldatasorse
+
+   BCRYPT_SALT_ROUNDS=10
+
+   JWT_SECRET="secret"
+   JWT_ACCESS_EXPIRES=60000
+   JWT_REFRESH_EXPIRES=300000
+   JWT_ACTION_EXPIRES=1800000
+
+   COOKIE_SAMESITE=strict
+   COOKIE_SECURE=true
+
+   EMAIL_USER=project.for.test.and@gmail.com
+   EMAIL_PASSWORD="hpsl saqz yvmg jbkt"
+
+## Scripts
 1. **Run in development mode**: This command uses nodemon to watch for file changes and automatically restart the server.
    ```bash
    npm run dev
@@ -48,4 +65,14 @@
 5. **Run prettier in the project**:
     ```bash
    npm run prettier
-   
+
+## Testing
+For testing use the postman collection: postman/Lamdan Copy.postman_collection.json
+
+## Author
+
+This test project was developed by **Volodymyr Fylypiv** as part of a development journey.
+If you have any questions or suggestions, feel free to reach out:
+
+- **Email**: [ratecurrent@gmail.com](mailto:ratecurrent@gmail.com)
+- **GitHub**: [github.com/Filain](https://github.com/Filain)

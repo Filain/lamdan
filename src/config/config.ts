@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
-    port: process.env.PORT || 5002,
-    url: process.env.URL,
-    dbUser: process.env.DB_USER,
-    dbPassword: process.env.DB_PASSWORD,
-    dbName: process.env.DB_NAME,
+    port: process.env.PORT || 5001,
+    url: process.env.URL || 'http://localhost:3000',
+    dbUser: process.env.DB_USER || 'lamda',
+    dbPassword: process.env.DB_PASSWORD || 'TUcDkfnHovkH4EET',
+    dbName: process.env.DB_NAME || 'ldatasorse',
     bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '10'),
     jwt_secret: process.env.JWT_SECRET || 'secret',
 
