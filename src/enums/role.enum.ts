@@ -3,6 +3,12 @@ export enum RoleEnum {
     ADMIN = 'admin',
 }
 
+export enum ActivationEnum {
+    NEW = 'new',
+    ACTIVATION = 'activation',
+    ACTIVE = 'active',
+}
+
 // export enum Status {
 //     IN_WORK = 'In work',
 //     NEW = 'New',

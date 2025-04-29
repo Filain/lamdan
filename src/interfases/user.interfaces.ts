@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { JwtPayload } from 'jsonwebtoken';
 
-import { RoleEnum } from '../enums/role.enum';
+import { ActivationEnum, RoleEnum } from '../enums/role.enum';
 
 export interface IUser {
     _id: mongoose.Types.ObjectId;
@@ -14,6 +14,7 @@ export interface IUser {
     isBanned: boolean;
     inWork: number;
     total: number;
+    activation?: ActivationEnum | string;
     createdAt?: Date;
     updatedAt?: Date;
 }

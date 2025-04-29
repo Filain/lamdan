@@ -16,7 +16,7 @@ import { commentRouter } from './routes/comment.routes';
 import { groupRouter } from './routes/group.routes';
 import { exelRouter } from './routes/exel.routes';
 import { adminRouter } from './routes/admin.routes';
-import { RoleEnum } from './enums/role.enum';
+import { ActivationEnum, RoleEnum } from './enums/role.enum';
 
 const app: Application = express();
 
@@ -57,6 +57,7 @@ async function createDefaultAdmin() {
             isBanned: false,
             name: 'Admin',
             surname: 'Super',
+            activation: ActivationEnum.ACTIVE,
         });
         Logger.info('👨 Default admin user created');
     }

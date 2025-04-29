@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { RoleEnum } from '../enums/role.enum';
+import { ActivationEnum, RoleEnum } from '../enums/role.enum';
 import { regexConstant } from '../constants/regex.constant';
 
 const userSchema = new mongoose.Schema(
@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema(
             enum: RoleEnum,
             default: RoleEnum.MANAGER,
         },
+        activation: {
+            type: String,
+            enum: ActivationEnum,
+            default: ActivationEnum.NEW,
+        },
+
         isActive: {
             type: Boolean,
             default: false,

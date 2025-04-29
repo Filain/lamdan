@@ -48,6 +48,7 @@ export class UserRepository {
             )
             .exec();
     }
+
     async activateUser(userId: string): Promise<IUser | null> {
         return await userModel
             .findByIdAndUpdate(
@@ -55,6 +56,15 @@ export class UserRepository {
                 { isActive: true },
                 { new: true },
             )
+            .exec();
+    }
+
+    async activationProcess(
+        userId: string,
+        activation: string,
+    ): Promise<IUser | null> {
+        return await userModel
+            .findByIdAndUpdate({ _id: userId }, { activation }, { new: true })
             .exec();
     }
 

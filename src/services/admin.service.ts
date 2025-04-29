@@ -1,7 +1,6 @@
 import status from 'http-status';
 import jwt from 'jsonwebtoken';
 
-// import jwt, { JwtPayload } from 'jsonwebtoken';
 import { config } from '../config/config';
 import { BaseError } from '../errors/base.error';
 import {
@@ -18,6 +17,7 @@ import {
 import { emailService } from './email.service';
 import createHash from '../libs/bcrypt/createHash';
 import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
+import { ActivationEnum } from '../enums/role.enum';
 
 export class AdminService {
     constructor(
@@ -76,10 +76,23 @@ export class AdminService {
     }
 
     async getActivationToken(id: string): Promise<boolean> {
+        const user = await this.userRepository.activationProcess(
+            id,
+            ActivationEnum.ACTIVATION,
+        );
+
+        if (!user) {
+            throw new BaseError(
+                'User not found',
+                'getActivationToken.AdminService',
+                status.CONFLICT,
+            );
+        }
+
+
         const actionToken = jwt.sign({ userId: id }, config.jwt_secret, {
             expiresIn: config.jwt_action_expires,
         });
-        console.log('getActivationToken', actionToken);
         if (!actionToken) {
             throw new BaseError(
                 'Action token not created',
@@ -90,14 +103,6 @@ export class AdminService {
         }
         const verificationLink = `${config.url}/active/${actionToken}`;
 
-        const user = await this.userRepository.getById(id);
-        if (!user) {
-            throw new BaseError(
-                'User not found',
-                'getActivationToken.AdminService',
-                status.CONFLICT,
-            );
-        }
         return await emailService.sendEmail(
             user.email,
             'Activate your account',
@@ -106,11 +111,10 @@ export class AdminService {
     }
 
     async changePassword(token: string, password: string): Promise<boolean> {
-        console.log('changePassword', token);
-
         const { userId } = jwt.verify(token, config.jwt_secret) as {
             userId: string;
         };
+
         if (!userId) {
             throw new BaseError(
                 'User not found',
@@ -128,6 +132,19 @@ export class AdminService {
                 'Server error',
             );
         }
+        if (!user.activation) {
+            throw new BaseError(
+                'User is not activated',
+                'changePassword.AdminService',
+                status.CONFLICT,
+                'Server error',
+            );
+        }
+        await this.userRepository.activationProcess(
+            userId,
+            ActivationEnum.ACTIVE,
+        );
+
         const hashPassword = await createHash(password as string);
         const changePassword = await this.userRepository.changePassword(
             userId,
@@ -149,6 +166,7 @@ export class AdminService {
                 status.UNPROCESSABLE_ENTITY,
             );
         }
+
         return true;
     }
 

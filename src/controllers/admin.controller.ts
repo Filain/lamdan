@@ -80,7 +80,6 @@ class AdminController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
-        console.log(req.params.userId);
         try {
             const order = await this.adminService.getActivationToken(
                 req.params.userId,
