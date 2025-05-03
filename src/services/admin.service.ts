@@ -18,6 +18,7 @@ import { emailService } from './email.service';
 import createHash from '../libs/bcrypt/createHash';
 import { ICreateAdminRequestBody } from '../interfases/admin.interfaces';
 import { ActivationEnum } from '../enums/role.enum';
+import { userPresenter } from '../presenters/user.presenter';
 
 export class AdminService {
     constructor(
@@ -34,7 +35,7 @@ export class AdminService {
                 status.CONFLICT,
             );
         }
-        return users;
+        return userPresenter.toListDto(users.data, users.total);
     }
 
     async getStatistics(): Promise<IStatistic> {
@@ -60,7 +61,7 @@ export class AdminService {
                 status.CONFLICT,
             );
         }
-        return user;
+        return userPresenter.toPublicResDto(user);
     }
 
     async unbanUser(id: string): Promise<IUser> {
@@ -72,7 +73,7 @@ export class AdminService {
                 status.CONFLICT,
             );
         }
-        return user;
+        return userPresenter.toPublicResDto(user);
     }
 
     async getActivationToken(id: string): Promise<boolean> {
@@ -88,7 +89,6 @@ export class AdminService {
                 status.CONFLICT,
             );
         }
-
 
         const actionToken = jwt.sign({ userId: id }, config.jwt_secret, {
             expiresIn: config.jwt_action_expires,
@@ -190,7 +190,7 @@ export class AdminService {
                 status.UNPROCESSABLE_ENTITY,
             );
         }
-        return user;
+        return userPresenter.toPublicResDto(user);
     }
 }
 

@@ -15,6 +15,7 @@ import { BaseError } from '../errors/base.error';
 import validateHash from '../libs/bcrypt/validateHash';
 import { config } from '../config/config';
 import createHash from '../libs/bcrypt/createHash';
+import { userPresenter } from '../presenters/user.presenter';
 
 export class AuthService {
     constructor(private authRepository: AuthRepository) {}
@@ -29,10 +30,11 @@ export class AuthService {
             );
         }
         const hashPassword = await createHash(userData?.password ?? '');
-        return await this.authRepository.registerUser({
+        const userCreated = await this.authRepository.registerUser({
             ...userData,
             password: hashPassword,
         });
+        return userPresenter.toPublicResDto(userCreated);
     }
     async login(
         response: Response<IUserResponse>,
@@ -64,7 +66,7 @@ export class AuthService {
         });
         this.setupCookies(response, tokens);
         await this.authRepository.lastLogin(user._id);
-        return user;
+        return userPresenter.toPublicResDto(user);
     }
 
     logout(response: Response, accessToken: string | undefined) {
@@ -130,7 +132,7 @@ export class AuthService {
         const { uid } = JWTdecoded;
         const user = await this.authRepository.findUserById(uid);
 
-        return user;
+        return userPresenter.toPublicResDto(user);
     }
 
     private setupCookies(

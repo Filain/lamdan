@@ -19,6 +19,13 @@ export interface IUser {
     updatedAt?: Date;
 }
 
+export type IUserResponsePresenter = Omit<IUser, 'password'>;
+
+export interface IUserResponseListPresenter {
+    data: IUserResponsePresenter[];
+    total: number;
+}
+
 export interface ICreateUserRequestBody {
     username?: string;
     email: string;

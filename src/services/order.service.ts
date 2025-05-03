@@ -90,9 +90,7 @@ export class OrderService {
         }
 
         const inWork = await this.orderRepository.inWork(userId);
-        console.log('inWork', inWork);
         const total = await this.orderRepository.total(userId);
-        console.log('total', total);
         await this.userRepository.update(userId, inWork, total);
 
         //TODO додати тут статистику до юзера
