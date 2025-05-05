@@ -31,8 +31,8 @@ export class OrderService {
     }
 
     async post(dto: IOrder, userId: string): Promise<IOrder> {
-        const manager = await this.userRepository.getById(userId);
-        const order = await this.orderRepository.post(dto, manager?.name || '');
+        // const manager = await this.userRepository.getById(userId);
+        const order = await this.orderRepository.post(dto, userId);
 
         if (!order._id) {
             throw new BaseError(
@@ -42,6 +42,10 @@ export class OrderService {
                 'Server error',
             );
         }
+        const inWork = await this.orderRepository.inWork(userId);
+        const total = await this.orderRepository.total(userId);
+        await this.userRepository.update(userId, inWork, total);
+
         return order;
     }
 
@@ -93,7 +97,6 @@ export class OrderService {
         const total = await this.orderRepository.total(userId);
         await this.userRepository.update(userId, inWork, total);
 
-        //TODO додати тут статистику до юзера
         return updatedOrder;
     }
 }

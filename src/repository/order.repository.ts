@@ -9,6 +9,7 @@ import {
 import ordersModel from '../models/orders.model';
 import { IStatistic } from '../interfases/user.interfaces';
 import { groupRepository } from './group.repository';
+import { Status } from '../enums/role.enum';
 
 export class OrderRepository {
     async getAll(query: IOrderQuery, userId: string): Promise<IOrderList> {
@@ -85,7 +86,11 @@ export class OrderRepository {
         return { data: orderData.length ? orderData : [], total };
     }
 
-    async post(dto: IOrder, manager: string): Promise<IOrder> {
+    async post(dto: IOrder, managerId: string): Promise<IOrder> {
+        const manager = new mongoose.Types.ObjectId(managerId);
+        if (!dto.status) {
+            dto.status = Status.NEW;
+        }
         return await ordersModel.create({
             ...dto,
             manager,
