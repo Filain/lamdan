@@ -4,7 +4,27 @@
 
 Backend part of a CRM system for managing applications in a programming school.
 
-Implemented using Node.js, Express, MongoDB (Atlas), with support for roles, authorization, and application processing.
+## 🔐 Login Credentials
+
+To log in, use the following credentials:
+
+- **Email**: `admin@gmail.com`
+- **Password**: `admin`
+
+
+## 🛠 Tech Stack
+
+- **Node.js**: JavaScript runtime for building scalable server-side applications.
+- **Express.js**: Minimal and flexible web framework for building RESTful APIs.
+- **Mongoose**: ODM library for MongoDB, enabling schema-based data modeling.
+- **Joi**: Powerful schema description and data validation library.
+- **bcrypt**: Library for hashing and verifying passwords securely.
+- **jsonwebtoken**: For generating and validating JWT access and refresh tokens.
+- **cookie-parser**: Middleware to parse cookies in incoming requests.
+- **nodemailer**: Module for sending emails from the server (e.g., for password recovery or verification).
+- **exceljs**: Library for reading and writing Excel files (XLSX, XLS).
+- **winston**: Versatile logging library with support for multiple transports.
+- **http-status**: Provides readable constants for HTTP response status codes.
 
 ### Installation
 
@@ -69,10 +89,16 @@ Implemented using Node.js, Express, MongoDB (Atlas), with support for roles, aut
 ## Testing
 For testing use the postman collection: postman/Lamdan Copy.postman_collection.json
 
+⚠️ **Note:** For testing purposes, the access and refresh token lifetimes are intentionally set to short durations.
+
+## Live Demo
+👉 [lamdan.vercel.app](https://lamdan.vercel.app/)
+
 ## Author
 
 This test project was developed by **Volodymyr Fylypiv** as part of a development journey.
 If you have any questions or suggestions, feel free to reach out:
 
 - **Email**: [ratecurrent@gmail.com](mailto:ratecurrent@gmail.com)
+- **Linkedin**: [linkedin.com](https://www.linkedin.com/in/volodymyr-fylypiv/)
 - **GitHub**: [github.com/Filain](https://github.com/Filain)

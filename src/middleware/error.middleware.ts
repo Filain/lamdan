@@ -17,7 +17,6 @@ export async function errorMiddleware(
         return;
     }
     await errorHandler.handleError(err);
-    // Відпраляє статус, код помилки та повідомлення помилки на клієнт
     res.status(err.httpCode || 500).json({
         message: err.message || 'Internal Server Error',
     });

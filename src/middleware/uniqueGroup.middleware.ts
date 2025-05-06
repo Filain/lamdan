@@ -6,7 +6,7 @@ import { IGroup } from '../interfases/group.interfaces';
 
 interface CustomRequestBody<T> extends Request {
     body: T;
-    user?: { userId: string; userRole: string }; // Додати, якщо використовуєте авторизацію
+    user?: { userId: string; userRole: string };
 }
 
 class CheckUniqueMiddleware {

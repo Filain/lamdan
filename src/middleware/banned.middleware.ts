@@ -11,7 +11,7 @@ class BannedMiddleware {
         next: NextFunction,
     ): void {
         if (!req.user) {
-            return next(); // Якщо користувач не авторизований, пропускаємо перевірку
+            return next();
         }
 
         userRepository
@@ -27,7 +27,7 @@ class BannedMiddleware {
                 }
                 next();
             })
-            .catch(next); // Автоматична передача помилки в Express
+            .catch(next);
     }
 }
 

@@ -27,11 +27,9 @@ export class ExelService {
             );
         }
 
-        // Створюємо новий Excel-файл
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Exported Data');
 
-        // Додаємо заголовки
         worksheet.columns = [
             { header: 'ID', key: '_id', width: 25 },
             { header: 'Age', key: 'age', width: 10 },
@@ -50,7 +48,6 @@ export class ExelService {
             { header: 'Comment', key: 'comment', width: 30 },
             { header: 'Дата створення', key: 'createdAt', width: 25 },
         ];
-        // Заповнюємо рядки даними
         orders.forEach(item => {
             worksheet.addRow(item);
         });

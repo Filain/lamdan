@@ -37,7 +37,6 @@ app.use(
     }),
 );
 
-// Маршрут для перевірки сервера
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/order', orderRouter);

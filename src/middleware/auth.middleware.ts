@@ -59,7 +59,6 @@ class AuthMiddleware {
             next();
         } catch (e) {
             if (e instanceof TokenExpiredError) {
-                // Обробка помилки закінчення терміну дії токена
                 next(
                     new BaseError(
                         'Access token expired',
@@ -67,9 +66,7 @@ class AuthMiddleware {
                         status.UNAUTHORIZED,
                     ),
                 );
-                // Тут ви можете додати логіку для відправки запиту на оновлення токена (залежно від вашої реалізації)
             } else {
-                // Обробка інших помилок верифікації токена (наприклад, неправильний підпис)
                 next(
                     new BaseError(
                         'Invalid access token',

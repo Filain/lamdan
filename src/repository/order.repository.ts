@@ -39,7 +39,7 @@ export class OrderRepository {
             filterObj.phone = { $regex: query.phone, $options: 'i' };
         }
         if (query.age) {
-            filterObj.age = query.age; // або можна застосувати діапазон, якщо потрібно
+            filterObj.age = query.age;
         }
         if (query.course) {
             filterObj.course = { $regex: query.course, $options: 'i' };
@@ -67,9 +67,8 @@ export class OrderRepository {
             filterObj.manager = new mongoose.Types.ObjectId(userId);
         }
 
-        // Динамічне сортування
-        let sortField = query?.sort?.replace('-', '') || 'id'; // Вибір поля для сортування
-        let sortOrder: SortOrder = query?.sort?.startsWith('-') ? -1 : 1; // Перевірка напрямку сортування
+        let sortField = query?.sort?.replace('-', '') || 'id';
+        let sortOrder: SortOrder = query?.sort?.startsWith('-') ? -1 : 1;
         const sort: { [key: string]: SortOrder } = { [sortField]: sortOrder };
 
         const orderData = await ordersModel
@@ -138,8 +137,8 @@ export class OrderRepository {
         return await ordersModel
             .findByIdAndUpdate(
                 _id,
-                { $push: { comment: commentId } }, // Додаємо коментар в масив
-                { new: true }, // Повертаємо оновлений документ
+                { $push: { comment: commentId } },
+                { new: true },
             )
             .exec();
     }
@@ -197,9 +196,8 @@ export class OrderRepository {
             filterObj.manager = userId;
         }
 
-        // Динамічне сортування
-        let sortField = query?.sort?.replace('-', '') || 'id'; // Вибір поля для сортування
-        let sortOrder: SortOrder = query?.sort?.startsWith('-') ? -1 : 1; // Перевірка напрямку сортування
+        let sortField = query?.sort?.replace('-', '') || 'id';
+        let sortOrder: SortOrder = query?.sort?.startsWith('-') ? -1 : 1;
         const sort: { [key: string]: SortOrder } = { [sortField]: sortOrder };
 
         return await ordersModel.find(filterObj).sort(sort).exec();

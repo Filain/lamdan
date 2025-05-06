@@ -13,7 +13,7 @@
     "prettier": "npx prettier src --check",
     "prettier:fix": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts)\""
   },
-  "author": "Me and my team",
+  "author": "Volodymyr Fylypiv <ratecurrent@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@swc/core": "^1.10.4",

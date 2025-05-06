@@ -9,7 +9,6 @@ export class CommentRepository {
         userId: string,
         orderId?: string,
     ): Promise<IComment> {
-        // Перетворюємо userId на ObjectId для роботи з Mongoose
         const commentedBy = new mongoose.Types.ObjectId(userId);
         const order = new mongoose.Types.ObjectId(orderId);
         return await commentModel.create({ ...dto, commentedBy, order });

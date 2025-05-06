@@ -31,7 +31,6 @@ export class OrderService {
     }
 
     async post(dto: IOrder, userId: string): Promise<IOrder> {
-        // const manager = await this.userRepository.getById(userId);
         const order = await this.orderRepository.post(dto, userId);
 
         if (!order._id) {
@@ -71,16 +70,6 @@ export class OrderService {
             );
         }
         return deletedOrder;
-
-        // const order = await this.orderRepository.getById(id);
-        // if (!order) {
-        //     throw new BaseError(
-        //         'Order not found',
-        //         'deleteById.OrderService',
-        //         status.CONFLICT,
-        //     );
-        // }
-        // return await this.orderRepository.delete(id);
     }
 
     async update(id: string, dto: IOrder, userId: string): Promise<IOrder> {
