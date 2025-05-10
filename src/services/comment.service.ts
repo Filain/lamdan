@@ -22,6 +22,19 @@ export class CommentService {
         userId: string,
         orderId: string,
     ): Promise<IComment> {
+        const manager = await this.orderRepository.getById(orderId);
+        if (
+            !manager ||
+            (manager.manager && manager.manager.toString() !== userId)
+        ) {
+            console.log('nene');
+            throw new BaseError(
+                'Order not found',
+                'post.CommentService',
+                status.CONFLICT,
+            );
+        }
+
         const comment = await this.commentRepository.post(dto, userId, orderId);
         if (!comment) {
             throw new BaseError(
@@ -34,6 +47,7 @@ export class CommentService {
         const order = await this.orderRepository.addComment(
             orderId,
             comment._id,
+            userId,
         );
         if (!order) {
             throw new BaseError(

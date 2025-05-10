@@ -130,14 +130,25 @@ export class OrderRepository {
         });
         return updated ? updated.toObject<IOrder>() : null;
     }
+
     async addComment(
         _id: string,
         commentId: Types.ObjectId | undefined,
+        userId: string,
     ): Promise<IOrder | null> {
+        const id = new mongoose.Types.ObjectId(userId);
         return await ordersModel
             .findByIdAndUpdate(
                 _id,
-                { $push: { comment: commentId } },
+                {
+                    $push: {
+                        comment: commentId,
+                    },
+                    $set: {
+                        manager: id,
+                        status: Status.IN_WORK,
+                    },
+                },
                 { new: true },
             )
             .exec();
