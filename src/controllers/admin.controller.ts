@@ -51,7 +51,10 @@ class AdminController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const user = await this.adminService.banUser(req.params.userId);
+            const user = await this.adminService.banUser(
+                req.params.userId,
+                req.user?.userId,
+            );
             if (user) {
                 SuccessHandler.created(res, user);
             }

@@ -52,7 +52,14 @@ export class AdminService {
         return statistics;
     }
 
-    async banUser(id: string): Promise<IUser> {
+    async banUser(id: string, myId?: string): Promise<IUser> {
+        if (id === myId) {
+            throw new BaseError(
+                'You cannot ban yourself',
+                'banUser.AdminService',
+                status.CONFLICT,
+            );
+        }
         const user = await this.userRepository.banUser(id);
         if (!user) {
             throw new BaseError(

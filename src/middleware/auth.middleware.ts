@@ -120,7 +120,23 @@ class AuthMiddleware {
 
             next();
         } catch (e) {
-            next(e);
+            if (e instanceof TokenExpiredError) {
+                next(
+                    new BaseError(
+                        'Access token expired',
+                        'AuthMiddleware.checkRefreshToken',
+                        status.FORBIDDEN,
+                    ),
+                );
+            } else {
+                next(
+                    new BaseError(
+                        'Invalid access token',
+                        'AuthMiddleware.checkRefreshToken',
+                        status.FORBIDDEN,
+                    ),
+                );
+            }
         }
     }
 }
