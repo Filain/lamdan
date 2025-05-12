@@ -83,7 +83,7 @@ export class AdminService {
         return userPresenter.toPublicResDto(user);
     }
 
-    async getActivationToken(id: string): Promise<boolean> {
+    async getActivationToken(id: string): Promise<string> {
         const user = await this.userRepository.activationProcess(
             id,
             ActivationEnum.ACTIVATION,
@@ -110,11 +110,13 @@ export class AdminService {
         }
         const verificationLink = `${config.url}/active/${actionToken}`;
 
-        return await emailService.sendEmail(
+        await emailService.sendEmail(
             user.email,
             'Activate your account',
             `<p>Please use the following link to activate your account:</p><a href="${verificationLink}">Activate your account</a>`,
         );
+
+        return verificationLink;
     }
 
     async changePassword(token: string, password: string): Promise<boolean> {

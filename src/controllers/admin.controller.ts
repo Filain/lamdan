@@ -87,6 +87,7 @@ class AdminController {
             const order = await this.adminService.getActivationToken(
                 req.params.userId,
             );
+            console.log(order);
             if (order) {
                 SuccessHandler.created(res, order);
             }
