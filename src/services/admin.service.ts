@@ -119,7 +119,7 @@ export class AdminService {
         return verificationLink;
     }
 
-    async changePassword(token: string, password: string): Promise<boolean> {
+    async setPassword(token: string, password: string): Promise<boolean> {
         const { userId } = jwt.verify(token, config.jwt_secret) as {
             userId: string;
         };
@@ -132,8 +132,9 @@ export class AdminService {
                 'Server error',
             );
         }
+
         const user = await this.userRepository.getById(userId);
-        if (!user) {
+        if (!user || user.activation === ActivationEnum.ACTIVE) {
             throw new BaseError(
                 'User not found',
                 'changePassword.AdminService',

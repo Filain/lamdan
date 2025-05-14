@@ -14,7 +14,7 @@ router.get(
     adminController.getStatistics,
 );
 
-router.patch('/change-password', adminController.changePassword);
+router.patch('/set-password', adminController.setPassword);
 
 router.patch(
     '/ban/:userId',

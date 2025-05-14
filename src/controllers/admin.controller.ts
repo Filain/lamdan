@@ -96,13 +96,13 @@ class AdminController {
         }
     };
 
-    changePassword = async (
+    setPassword = async (
         req: CustomRequestBody<{ token: string; password: string }>,
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const order = await this.adminService.changePassword(
+            const order = await this.adminService.setPassword(
                 req.body.token,
                 req.body.password,
             );
