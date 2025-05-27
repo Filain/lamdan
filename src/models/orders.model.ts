@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 const ordersSchema = new mongoose.Schema(
     {
         name: { type: String },
+        id: {
+            type: Number,
+            unique: true,
+            required: true,
+        },
         surname: { type: String, default: null },
         email: { type: String, default: null, unique: true },
         phone: { type: String, default: null },

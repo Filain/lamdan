@@ -46,7 +46,7 @@ export class ExelService {
             { header: 'Surname', key: 'surname', width: 20 },
             { header: 'Utm', key: 'utm', width: 30 },
             { header: 'Comment', key: 'comment', width: 30 },
-            { header: 'Дата створення', key: 'createdAt', width: 25 },
+            { header: 'Дата створення', key: 'created_at', width: 25 },
         ];
         orders.forEach(item => {
             worksheet.addRow(item);

@@ -87,11 +87,16 @@ export class OrderRepository {
 
     async post(dto: IOrder, managerId: string): Promise<IOrder> {
         const manager = new mongoose.Types.ObjectId(managerId);
+
+        const orderCount = await ordersModel.countDocuments();
+        const id = orderCount + 1;
+
         if (!dto.status) {
             dto.status = Status.NEW;
         }
         return await ordersModel.create({
             ...dto,
+            id,
             manager,
         });
     }

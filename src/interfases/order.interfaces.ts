@@ -7,6 +7,7 @@ export interface IOrderList {
 
 export interface IOrder {
     _id?: mongoose.Types.ObjectId;
+    serial?: number;
     name?: string | null;
     surname?: string | null;
     email?: string | null;
